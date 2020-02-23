@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="azblog_admin" />
+        <module name="azblog_article" />
+        <module name="azblog_commom" />
+        <module name="azblog_config" />
+        <module name="azblog_eureka" />
+        <module name="azblog_gateway" />
+        <module name="azblog_search" />
+        <module name="azblog_turbine" />
+        <module name="azblog_web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="azblog_common" target="1.8" />
+      <module name="azblog_zipkin" target="1.8" />
+      <module name="azblog_zuul" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="azblog" options="-parameters" />
+      <module name="azblog_admin" options="-parameters" />
+      <module name="azblog_article" options="-parameters" />
+      <module name="azblog_commom" options="-parameters" />
+      <module name="azblog_common" options="-parameters" />
+      <module name="azblog_config" options="-parameters" />
+      <module name="azblog_eureka" options="-parameters" />
+      <module name="azblog_gateway" options="-parameters" />
+      <module name="azblog_search" options="-parameters" />
+      <module name="azblog_turbine" options="-parameters" />
+      <module name="azblog_web" options="-parameters" />
+      <module name="azblog_zipkin" options="-parameters" />
+      <module name="azblog_zuul" options="-parameters" />
+    </option>
+  </component>
+</project>
