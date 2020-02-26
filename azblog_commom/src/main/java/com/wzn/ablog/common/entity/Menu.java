@@ -1,4 +1,4 @@
-package com.wzn.ablog.admin.entity;
+package com.wzn.ablog.common.entity;
 
 import lombok.Data;
 
@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 @Data

@@ -1,6 +1,6 @@
 package com.wzn.ablog.article.dao;
 
-import com.wzn.ablog.article.entity.Comment;
+import com.wzn.ablog.common.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

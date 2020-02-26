@@ -1,6 +1,6 @@
 package com.wzn.ablog.admin.config;
 
-import com.wzn.ablog.admin.utils.RsaUtils;
+import com.wzn.ablog.common.utils.RsaUtils;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -13,7 +13,7 @@ import java.security.PublicKey;
 @ConfigurationProperties(prefix = "rsakey")
 @PropertySource("classpath:/application.yml")
 @Data
-public class RsaKeyConfig {
+public class AdminRsaKeyConfig {
     private String publicKeyName;
     private String privateKeyName;
 

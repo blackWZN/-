@@ -1,10 +1,10 @@
-package com.wzn.ablog.admin.entity;
+package com.wzn.ablog.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import lombok.experimental.Accessors;
-import org.apache.catalina.User;
-import org.springframework.context.annotation.Lazy;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,25 +17,24 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "admin")
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+//@ToString
+//@NoArgsConstructor
+//@AllArgsConstructor
 public class Admin implements UserDetails{
     @Id
     private String id;
-    private String nickname;
     private String username;
     private String password;
     private String avatar;
     private String sex;
     private String birthday;
     private String email;
-    private String create_time;
-    private String last_login_time;
+    @Column(name = "create_time")
+    private String createTime;
+    @Column(name = "last_login_time")
+    private String lastLoginTime;
     //账号状态 0 正常 1 锁定
-    private String state;
-
-
+    private String status;
 
     /**
      * fetch=FetchType.EAGER 关闭懒加载
@@ -87,7 +86,7 @@ public class Admin implements UserDetails{
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return state.equals("1") ? false : true;
+        return status.equals("1") ? false : true;
     }
 
     //密码未过期

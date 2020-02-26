@@ -1,9 +1,8 @@
-package com.wzn.ablog.admin.entity;
+package com.wzn.ablog.common.entity;
 
 import lombok.Data;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.GrantedAuthority;
 
+import javax.management.relation.RoleInfo;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,5 +24,5 @@ public class Port {
             joinColumns = {@JoinColumn(name = "port_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")}
     )
-    private List<Role> roles = new ArrayList<>();
+    private List<RoleInfo> roles = new ArrayList<>();
 }

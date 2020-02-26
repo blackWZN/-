@@ -1,6 +1,6 @@
 package com.wzn.ablog.admin.dao;
 
-import com.wzn.ablog.admin.entity.Menu;
+import com.wzn.ablog.common.entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

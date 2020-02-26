@@ -9,6 +9,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/azblog_base/pom.xml" />
         <option value="$PROJECT_DIR$/azblog_zipkin/pom.xml" />
       </set>
     </option>

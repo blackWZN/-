@@ -2,6 +2,7 @@ package com.wzn.ablog.admin.config;
 
 import com.wzn.ablog.admin.service.AdminService;
 import com.wzn.ablog.admin.web.filter.*;
+import com.wzn.ablog.common.utils.RsaKeyConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private RsaKeyConfig rsaKeyConfig;
+    private AdminRsaKeyConfig adminRsaKeyConfig;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -47,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new LoginFilter(super.authenticationManager(), rsaKeyConfig,redisTemplate))
+                .addFilter(new LoginFilter(super.authenticationManager(), adminRsaKeyConfig,redisTemplate))
                 ;
     }
 

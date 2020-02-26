@@ -33,6 +33,7 @@
             <groupId>com.wzn</groupId>
             <artifactId>azblog_commom</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <!--json工具-->
         <dependency>

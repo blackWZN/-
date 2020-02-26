@@ -1,10 +1,9 @@
 package com.wzn.ablog.admin;
 
-import com.netflix.discovery.converters.Auto;
-import com.wzn.ablog.admin.config.RsaKeyConfig;
+import com.wzn.ablog.admin.config.AdminRsaKeyConfig;
 import com.wzn.ablog.admin.dao.*;
-import com.wzn.ablog.admin.entity.*;
-import com.wzn.ablog.admin.utils.JwtUtils;
+import com.wzn.ablog.common.entity.*;
+import com.wzn.ablog.common.utils.JwtUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class AdminTest {
     @Test
     public void test3(){
         Admin admin = adminDao.findAdminByUsername("297130962@qq.com");
-        List<Role> roles = roleDao.findRolesByAminId(admin.getId());
+//        List<com.wzn.ablog.admin.entiry.Role> roles = roleDao.findRolesByAminId(admin.getId());
         System.out.println(admin.getId());
 //        for (Role role:roles) {
 //            admin.getRoles().add(role);
@@ -74,7 +73,7 @@ public class AdminTest {
     }
 
     @Autowired
-    private RsaKeyConfig rsaKeyConfig;
+    private AdminRsaKeyConfig rsaKeyConfig;
 
     @Test
     public void test5(){
@@ -85,8 +84,8 @@ public class AdminTest {
         role.setRole_name("ROOT");
         Role role1 = new Role();
         role1.setRole_name("ADMIN");
-        admin.getRoles().add(role);
-        admin.getRoles().add(role1);
+//        admin.getRoles().add(role);
+//        admin.getRoles().add(role1);
         String s = JwtUtils.generateTokenExpireInMinutes(admin, rsaKeyConfig.getPrivateKey(), 60 * 24 * 30);
         System.out.println(s);
     }

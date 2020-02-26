@@ -1,7 +1,7 @@
-package com.wzn.ablog.admin.utils;
+package com.wzn.ablog.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wzn.ablog.admin.vo.Result;
+import com.wzn.ablog.common.vo.Result;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;

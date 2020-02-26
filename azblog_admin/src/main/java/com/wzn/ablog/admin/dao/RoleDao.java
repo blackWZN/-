@@ -1,8 +1,6 @@
 package com.wzn.ablog.admin.dao;
 
-import com.wzn.ablog.admin.entity.Admin;
-import com.wzn.ablog.admin.entity.Role;
-import org.hibernate.validator.constraints.EAN;
+import com.wzn.ablog.common.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

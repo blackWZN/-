@@ -1,7 +1,7 @@
 package com.wzn.ablog.article.web;
 
-import com.wzn.ablog.article.entity.Category;
 import com.wzn.ablog.article.service.CategoryService;
+import com.wzn.ablog.common.entity.Category;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.ablog.common.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.wzn.ablog.article.service;
 
 import com.wzn.ablog.article.dao.CategoryDao;
-import com.wzn.ablog.article.entity.Category;
+import com.wzn.ablog.common.entity.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public class CategoryService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public Page<Category> list(Integer page,Integer limit){
+    public Page<Category> list(Integer page, Integer limit){
         return categoryDao.findAll(PageRequest.of(page-1,limit));
     }
 

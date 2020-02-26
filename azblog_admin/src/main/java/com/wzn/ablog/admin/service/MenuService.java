@@ -1,12 +1,11 @@
 package com.wzn.ablog.admin.service;
 
 import com.wzn.ablog.admin.dao.MenuDao;
-import com.wzn.ablog.admin.entity.Menu;
+import com.wzn.ablog.common.entity.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service

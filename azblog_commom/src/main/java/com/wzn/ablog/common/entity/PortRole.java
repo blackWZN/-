@@ -1,4 +1,4 @@
-package com.wzn.ablog.admin.entity;
+package com.wzn.ablog.common.entity;
 
 import lombok.Data;
 

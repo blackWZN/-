@@ -1,4 +1,4 @@
-package com.wzn.ablog.article.entity;
+package com.wzn.ablog.common.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

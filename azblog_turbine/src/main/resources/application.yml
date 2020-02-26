@@ -15,4 +15,3 @@ turbine:
   #要监控的微服务serviceId,多个用逗号隔开
   app-config: azblog-article,azblog-search
   clusterNameExpression: "'default'"
-wzn

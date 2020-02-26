@@ -32,7 +32,7 @@ spring:
               args:
                 #用于限流的键的解析器的 Bean 名字。使用 SpEL表达式取
                 key-resolver: '#{@urlKeyResolver}'
-                redis-rate-limiter.replenishRate: 1 #令牌桶总容量
+                redis-rate-limiter.replenishRate: 15 #令牌桶总容量
                 redis-rate-limiter.burstCapacity: 3 #令牌桶每秒填充平均速率
         - id: azblog-article
           uri: lb://azblog-article
@@ -53,5 +53,7 @@ spring:
   sleuth:
     sampler:
       probability: 1.0 #采样的比例
+  main:
+    allow-bean-definition-overriding: true
 rsakey:
   publicKeyName: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD4qpE7FRL2/7XDh2eGVoqdSIP0MYqZWETWWwW7+rfz7Ngzm+yNKeFiEK34pOvJEDgzcfqNOsL2pb1e0vyKsjFNz9SJU0xLMz8oz1sP+weCT4limJtH60xDPIg3tNdqLSaRhD1swjZEBnuIRanBYn9w0EojA8szCwW+AUgsjnS3twIDAQAB

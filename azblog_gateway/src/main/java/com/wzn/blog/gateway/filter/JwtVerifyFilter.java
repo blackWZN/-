@@ -1,10 +1,11 @@
 package com.wzn.blog.gateway.filter;
 
 import com.wzn.ablog.common.utils.JwtUtils;
+import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.vo.Payload;
-import com.wzn.blog.gateway.config.RsaKeyConfig;
-import com.wzn.blog.gateway.entity.Admin;
-import com.wzn.blog.gateway.entity.Role;
+import com.wzn.blog.gateway.entiry.AdminInfo;
+import com.wzn.blog.gateway.entiry.Role;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class JwtVerifyFilter implements GlobalFilter, Ordered {
 
@@ -40,15 +42,16 @@ public class JwtVerifyFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         String path = request.getURI().getPath();
         //登录请求放行
-        if (path.contains("/admin/login") || path.contains("/admin/loginOut")){
+        if (path.contains("/admin/login")){
             return chain.filter(exchange);
         }
 
         List<String> list = request.getHeaders().get("Authorization");
         //获取token并解析校验
         String token = list.get(0);
-        Payload<Admin> tokenInfo = JwtUtils.getInfoFromToken(token, rsaKeyConfig.getPublicKey(), Admin.class);
-        Admin userInfo = tokenInfo.getUserInfo();
+        log.debug(token);
+        Payload<AdminInfo> tokenInfo = JwtUtils.getInfoFromToken(token, rsaKeyConfig.getPublicKey(), AdminInfo.class);
+        AdminInfo userInfo = tokenInfo.getUserInfo();
         List<Role> roles = userInfo.getRoles();
         List<String> roleName = new ArrayList<>();
         for (Role role : roles) {
@@ -56,7 +59,6 @@ public class JwtVerifyFilter implements GlobalFilter, Ordered {
         }
         redisTemplate.opsForValue().set("roles" + userInfo.getId(), roleName);
         return chain.filter(exchange);
-
     }
 
     /**

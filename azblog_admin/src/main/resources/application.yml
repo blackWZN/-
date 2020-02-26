@@ -45,3 +45,4 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${server.port} #向服务中心注册自定义id
     lease-renewal-interval-in-seconds: 50 #每次发送心跳的时间
 
+

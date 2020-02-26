@@ -1,11 +1,11 @@
-package com.wzn.ablog.article.config;
+package com.wzn.ablog.common.utils;
 
-import com.wzn.ablog.common.utils.RsaUtils;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 
 

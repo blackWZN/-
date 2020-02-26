@@ -1,14 +1,12 @@
 package com.wzn.ablog.admin.web.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wzn.ablog.admin.config.RsaKeyConfig;
-import com.wzn.ablog.admin.entity.Admin;
-import com.wzn.ablog.admin.entity.Role;
-import com.wzn.ablog.admin.utils.JwtUtils;
-import com.wzn.ablog.admin.utils.blogUtils;
+import com.wzn.ablog.admin.config.AdminRsaKeyConfig;
+import com.wzn.ablog.common.entity.Admin;
+import com.wzn.ablog.common.utils.JwtUtils;
+import com.wzn.ablog.common.utils.blogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +19,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -29,13 +26,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    private RsaKeyConfig rsaKeyConfig;
+    private AdminRsaKeyConfig adminRsaKeyConfig;
 
     private RedisTemplate redisTemplate;
 
-    public LoginFilter(AuthenticationManager manager, RsaKeyConfig rsaKeyConfig,RedisTemplate redisTemplate) {
+    public LoginFilter(AuthenticationManager manager, AdminRsaKeyConfig adminRsaKeyConfig,RedisTemplate redisTemplate) {
         this.manager = manager;
-        this.rsaKeyConfig = rsaKeyConfig;
+        this.adminRsaKeyConfig = adminRsaKeyConfig;
         this.redisTemplate = redisTemplate;
         //设置登录url
         super.setFilterProcessesUrl("/admin/login");
@@ -49,6 +46,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             ObjectMapper objectMapper = new ObjectMapper();
             Admin user = objectMapper.readValue(inputStream, Admin.class);
             this.logger.debug("认证用户");
+            this.logger.debug(user.getUsername()+user.getPassword());
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             return manager.authenticate(authenticationToken);
         } catch (Exception e) {
@@ -73,12 +71,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Admin admin = new Admin();
         //用户信息放入id和用户名，切记不要放密码
         admin.setId(currentAdmin.getId());
-        admin.setUsername(currentAdmin.getNickname());
+        admin.setUsername(currentAdmin.getUsername());
         admin.setRoles(currentAdmin.getRoles());
 
         logger.debug("getAuthorities:" + String.valueOf(authResult.getPrincipal()));
         //私钥生成token
-        String token = JwtUtils.generateTokenExpireInMinutes(admin, rsaKeyConfig.getPrivateKey(), 24 * 60);
+        String token = JwtUtils.generateTokenExpireInMinutes(admin, adminRsaKeyConfig.getPrivateKey(), 24 * 60);
         //将token响应给客户端
         blogUtils.respMsg(response, "200", "登录成功", token);
     }

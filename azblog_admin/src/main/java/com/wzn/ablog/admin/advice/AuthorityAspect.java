@@ -1,9 +1,9 @@
 package com.wzn.ablog.admin.advice;
 
-import com.wzn.ablog.admin.config.RsaKeyConfig;
-import com.wzn.ablog.admin.entity.Admin;
-import com.wzn.ablog.admin.utils.JwtUtils;
-import com.wzn.ablog.admin.vo.Payload;
+import com.wzn.ablog.common.entity.Admin;
+import com.wzn.ablog.common.utils.JwtUtils;
+import com.wzn.ablog.common.utils.RsaKeyConfig;
+import com.wzn.ablog.common.vo.Payload;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

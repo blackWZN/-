@@ -1,8 +1,8 @@
 package com.wzn.ablog.article.service;
 
 import com.wzn.ablog.article.dao.ArticleDao;
-import com.wzn.ablog.article.entity.Article;
 import com.wzn.ablog.article.feign.AdminFeign;
+import com.wzn.ablog.common.entity.Article;
 import com.wzn.ablog.common.utils.IdWorker;
 import com.wzn.ablog.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class ArticleService extends BaseService {
         if (list == null) {
             list = articleDao.findAll(PageRequest.of(page - 1, limit, Sort.by("updateTime").descending()));
             totaPage = list.getTotalPages();
-            redisTemplate.opsForValue().set("articles" + userId, list);
+            redisTemplate.opsForValue().set("articles" + userId + page, list);
         } else {
             return list;
         }
@@ -100,7 +101,7 @@ public class ArticleService extends BaseService {
         return articleDao.findAll();
     }
 
-    public Article findById(String id){
+    public Article findById(String id) {
         Optional<Article> article = articleDao.findById(id);
         return article.get();
     }

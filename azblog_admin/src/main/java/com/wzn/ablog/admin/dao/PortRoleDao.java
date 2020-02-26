@@ -1,7 +1,6 @@
 package com.wzn.ablog.admin.dao;
 
-import com.wzn.ablog.admin.entity.Port;
-import com.wzn.ablog.admin.entity.PortRole;
+import com.wzn.ablog.common.entity.PortRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

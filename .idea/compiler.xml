@@ -18,6 +18,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="azblog_base" target="1.8" />
       <module name="azblog_common" target="1.8" />
       <module name="azblog_zipkin" target="1.8" />
       <module name="azblog_zuul" target="1.8" />
@@ -28,6 +29,7 @@
       <module name="azblog" options="-parameters" />
       <module name="azblog_admin" options="-parameters" />
       <module name="azblog_article" options="-parameters" />
+      <module name="azblog_base" options="-parameters" />
       <module name="azblog_commom" options="-parameters" />
       <module name="azblog_common" options="-parameters" />
       <module name="azblog_config" options="-parameters" />
