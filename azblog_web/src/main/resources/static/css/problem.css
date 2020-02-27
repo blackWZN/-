@@ -1,0 +1,14 @@
+.layui-input-block{
+    width: 20%;
+    display: inline-block;
+    margin-left: 1%
+}
+
+#search span{
+    margin-right: 0.5%;
+    margin-left: 1%
+}
+
+#searchBtn{
+    margin-top: 10px;
+}
