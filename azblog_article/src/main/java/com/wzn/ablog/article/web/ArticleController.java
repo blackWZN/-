@@ -53,9 +53,9 @@ public class ArticleController {
     }
 
     @ApiOperation("根据id删除文章")
-    @DeleteMapping("/{id}")
-    public Result del(@PathVariable("id") String id, String[] ids) {
-        articleService.del(id, ids, TokenUtils.getUserId(request,rsaKeyConfig));
+    @DeleteMapping("/{ids}")
+    public Result del(@PathVariable("ids") String[] ids) {
+        articleService.del(ids, TokenUtils.getUserId(request,rsaKeyConfig));
         return new Result("200", "删除成功");
     }
 
@@ -63,7 +63,8 @@ public class ArticleController {
     @PostMapping
     public Result add(@RequestBody Article article) {
         log.debug(String.valueOf(article));
-        articleService.add(article, TokenUtils.getUserId(request,rsaKeyConfig));
+        articleService.add(article, TokenUtils.getUsername(request,rsaKeyConfig)
+        ,TokenUtils.getUserId(request,rsaKeyConfig));
         return new Result("200", "添加成功");
     }
 

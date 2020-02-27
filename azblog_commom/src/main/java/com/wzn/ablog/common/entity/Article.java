@@ -20,7 +20,7 @@ public class Article implements Serializable {
     private String title;
     private String intro;
     private String content;
-    private String nickname;
+    private String username;
     private String user_id;
     private String category_id;
     private String visit_count;

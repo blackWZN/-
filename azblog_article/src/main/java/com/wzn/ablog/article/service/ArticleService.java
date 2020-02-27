@@ -4,6 +4,7 @@ import com.wzn.ablog.article.dao.ArticleDao;
 import com.wzn.ablog.article.feign.AdminFeign;
 import com.wzn.ablog.common.entity.Article;
 import com.wzn.ablog.common.utils.IdWorker;
+import com.wzn.ablog.common.utils.RedisUtils;
 import com.wzn.ablog.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @Transactional
-public class ArticleService extends BaseService {
+public class ArticleService{
 
     @Autowired
     private ArticleDao articleDao;
@@ -34,8 +35,6 @@ public class ArticleService extends BaseService {
 
     private Integer totaPage;
 
-    @Autowired
-    private AdminFeign adminFeign;
 
     //加载列表
     public Page<Article> list(Integer page, Integer limit, String userId) {
@@ -51,25 +50,16 @@ public class ArticleService extends BaseService {
     }
 
     //删除
-    public void del(String id, String[] ids, String uId) {
-        if (id != null) {
+    public void del(String[] ids, String uId) {
+        for (String id : ids) {
             articleDao.deleteById(id);
-            clearRedis(totaPage, uId, redisTemplate);
         }
-        if (ids != null) {
-            for (String userId : ids) {
-                articleDao.deleteById(userId);
-            }
-            clearRedis(totaPage, uId, redisTemplate);
-        }
+        RedisUtils.clearRedis(totaPage, uId, redisTemplate);
+
     }
 
     //添加
-    public void add(Article reqArticle, String userId) {
-        Result name = adminFeign.getName(userId);
-        if (name.getStatus().equals("500")) {
-            throw new RuntimeException(name.getMessage());
-        }
+    public void add(Article reqArticle, String username, String userId) {
         String isOriginal = reqArticle.getIs_original();
         String recommended = reqArticle.getRecommended();
         Article article = new Article()
@@ -83,17 +73,16 @@ public class ArticleService extends BaseService {
                 .setContent(reqArticle.getContent())
                 .setCreate_time(new Date())
                 .setUpdateTime(new Date())
-                .setNickname((String) name.getData());
-        log.debug("service" + article);
+                .setUsername(username);
         articleDao.save(article);
-        clearRedis(totaPage, userId, redisTemplate);//清除缓存
+        RedisUtils.clearRedis(totaPage, userId, redisTemplate);//清除缓存
     }
 
     //更新
     public void update(Article article, String userId) {
         articleDao.delete(article);
         articleDao.save(article);
-        clearRedis(totaPage, userId, redisTemplate);
+        RedisUtils.clearRedis(totaPage, userId, redisTemplate);
     }
 
     //查找全部

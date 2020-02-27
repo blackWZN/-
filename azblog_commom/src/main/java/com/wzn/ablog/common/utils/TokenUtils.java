@@ -1,5 +1,6 @@
 package com.wzn.ablog.common.utils;
 
+import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.entity.AdminInfo;
 import com.wzn.ablog.common.entity.Role;
 import com.wzn.ablog.common.vo.Payload;
@@ -29,7 +30,7 @@ public class TokenUtils {
     public static String getUserId(HttpServletRequest request,RsaKeyConfig rsaKeyConfig){
         String token = request.getHeader("Authorization");
         log.debug(token);
-        Payload<AdminInfo> info = JwtUtils.getInfoFromToken(token, rsaKeyConfig.getPublicKey(), AdminInfo.class);
+        Payload<Admin> info = JwtUtils.getInfoFromToken(token, rsaKeyConfig.getPublicKey(), Admin.class);
         return info.getUserInfo().getId();
     }
 
