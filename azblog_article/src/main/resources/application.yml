@@ -12,9 +12,7 @@ spring:
   jpa:
     open-in-view: true
     show-sql: true
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
   redis:
     host: 192.168.25.135
     port: 6379

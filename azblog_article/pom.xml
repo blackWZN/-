@@ -33,7 +33,6 @@
             <groupId>com.wzn</groupId>
             <artifactId>azblog_commom</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
         <!--json工具-->
         <dependency>
@@ -144,5 +143,9 @@
             <!--<groupId>org.springframework.cloud</groupId>-->
             <!--<artifactId>spring-cloud-starter-sleuth</artifactId>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,9 +18,10 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "admin")
-//@ToString
-//@NoArgsConstructor
-//@AllArgsConstructor
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Component
 public class Admin implements UserDetails{
     @Id
     private String id;
