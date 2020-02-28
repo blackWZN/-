@@ -9,7 +9,7 @@ spring:
         git:
           uri: https://gitee.com/znwei/znWBlogConfig.git
           username: znWei
-          password: my623code
+          password: xxxx
   rabbitmq:
     host: 122.51.252.120
     port: 5672
