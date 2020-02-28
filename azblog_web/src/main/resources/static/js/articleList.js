@@ -108,7 +108,6 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                             table.reload('list', {});
                         }
                     },
-
                 })
                 break;
 
@@ -155,5 +154,19 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
         table.reload('list', {
             url: 'http://localhost:8202/search/' + keyword + '/1/10'
         });
+    })
+
+    //重置
+    $('.reset').click(function(){
+        $('#searchVal').val('');
+        table.reload('list', {
+            url: 'http://localhost:8202/article',
+            where: {
+                page: 1,
+                limit: 10
+            }
+        });
+       
+        
     })
 });
