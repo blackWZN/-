@@ -6,37 +6,6 @@ layui.use(['element', 'jquery', 'layer', 'laytpl'], function () {
     var laytpl = layui.laytpl;
     var storage = window.localStorage;
 
-    //系统首页跳转
-    $('#index a').on('click', function () {
-        layer.msg($(this).text(), { icon: -1 });
-        $('#bread a').eq(0).text(
-            $(this).text()
-        );
-        $('#bread a').eq(1).html('');
-        $('#content iframe').attr('src', 'systemIndex.htm');
-    })
-
-    //下拉菜单面包屑导航
-    $('.layui-nav-child a').on('click', function () {
-        layer.msg($(this).text(), { icon: -1 });
-        $('#bread a').eq(0).text(
-            $(this).parents('.layui-nav-child').siblings('a').text()
-        );
-        $('#bread a').eq(1).html(
-            $(this).text()
-        );
-    })
-
-    //没有子菜单的菜单 面包屑导航
-    $('#choice a').on('click', function () {
-        layer.msg($(this).text(), { icon: -1 });
-        $('#bread a').eq(0).text(
-            $(this).text()
-        );
-        $('#bread a').eq(1).html('');
-    })
-
-
     //显示用户名
     $.ajax({
         url: 'http://localhost:8202/admin/getUsername',
@@ -50,6 +19,30 @@ layui.use(['element', 'jquery', 'layer', 'laytpl'], function () {
             $('#username').text(data.data)
         }
     })
+
+    //刷新token
+    setInterval(function () {
+        $.ajax({
+            url: 'http://localhost:8202/admin/refreshToken',
+            type: 'get',
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            headers: {
+                Authorization: storage.getItem('token')
+            },
+            success: function (data) {
+                if (data.status == '500') {
+                    layer.open({
+                        content: data.message,
+                        yes: function (index, layero) {
+                            layer.close(index);
+                            location.href = 'login.html';
+                        }
+                    });
+                }
+            }
+        })
+    }, 1000 * 60 * 24)
 
     //退出登录
     $('#loginOut').click(function () {

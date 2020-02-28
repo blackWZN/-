@@ -22,7 +22,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">标题</label>
         <div class="layui-input-block">
-          <input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
+          <input type="text" name="title" value="" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
             class="layui-input">
         </div>
       </div>
@@ -38,7 +38,7 @@
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
           <select name="category_id" id="loadCate" lay-verify="required">
-            <option value=""></option>
+            <option value="" ></option>
 
           </select>
         </div>
@@ -54,7 +54,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-block">
-          <input type="checkbox" checked name="status" lay-skin="switch" lay-text="通过|待审">
+          <input type="checkbox" name="status" lay-skin="switch" lay-text="通过|待审">
         </div>
       </div>
 
@@ -84,6 +84,7 @@
       var index = layedit.build('descEndit'); //建立编辑器
       var articleId = storage.getItem('articleId');
       var formData = {};
+      var articleDta = {};
 
       //获取表单数据
       function getFormData() {
@@ -106,79 +107,81 @@
             Authorization: storage.getItem('token')
           },
           success: function (res) {
-            layer.open({
-              title: '调试'
-              , content: res.message
-            });
+            articleDta = res.data;
+            $('form input').eq(0).val(articleDta.title);
+            $('form input').eq(1).val(articleDta.intro);
+            //获取分类
+            $.get('http://localhost:8203/category/', {
+              page: 1,
+              limit: 10
+            }, function (res) {
+              var cate = $('#loadCate');
+              var data = res.data;
+              $.each(data, function (i, item) {
+                var option = $('<option />');
+                option.attr('value', item.id);
+                option.text(item.name);
+                option.appendTo(cate);
+                var categoryVal = $('form select').find('option');
+                //获取到分类并设置选中
+                $.each(categoryVal, function (i, item) {
+                  if ($(item).val() == articleDta.category_id) {
+                    option.attr('selected', 'selected');
+                  };
+                })
+                form.render("select");
+              })
+            })
+            //是否推荐
+            if(articleDta.recommended == 1){
+              $('form input').eq(3).attr('checked','checked');
+              form.render('checkbox');
+            }
+            //是否原创
+            if(articleDta.is_original == 1){
+              $('form input').eq(4).attr('checked','checked');
+              form.render('checkbox');
+            }
+            if(articleDta.status == 1){
+              $('form input').eq(5).attr('checked','checked');
+              form.render('checkbox');
+            }
+            //回显内容
+            layedit.setContent(index, articleDta.content, false);
             storage.removeItem('articleId');
           },
         })
       }
 
-      //获取分类
-      $.get('http://localhost:8203/category/', {
-        page: 1,
-        limit: 10
-      }, function (res) {
-        var cate = $('#loadCate');
-        var data = res.data;
-        $.each(data, function (i, item) {
-          var option = $('<option />');
-          option.attr('value', item.id);
-          option.text(item.name);
-          option.appendTo(cate);
-          form.render("select");
-        })
-      })
 
-      //点击提交
+      // 提交修改
       $('#subBtn').click(function () {
         getFormData();
-       
-          layer.open({
-            title: '调试'
-            , content: articleId
-          });
-          //提交修改
-          // var articleId = storage.getItem('articleId');
-          // $.ajax({
-          //   url: 'http://localhost:8202/article/' + articleId,
-          //   type: 'put',
-          //   dataType: "json",
-          //   contentType: "application/json;charset=utf-8",
-          //   headers: {
-          //     Authorization: storage.getItem('token')
-          //   },
-          //   data: JSON.stringify(formData),
-          //   success: function (res) {
-          //     layer.open({
-          //       title: '调试'
-          //       , content: res.message
-          //     });
-          //     location.href = 'articleList.html';
-          //   },
-          // })
 
-       
-          //提交添加
-          $.ajax({
-            url: 'http://localhost:8202/article',
-            type: 'post',
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            headers: {
-              Authorization: storage.getItem('token')
-            },
-            data: JSON.stringify(formData),
-            success: function (res) {
-              layer.open({
-                title: '调试'
-                , content: res.message
-              });
-              location.href = 'articleList.html';
-            },
-          })
-        
+        layer.open({
+          title: '调试'
+          , content: articleId
+        });
+
+        var articleId = storage.getItem('articleId');
+
+        $.ajax({
+          url: 'http://localhost:8202/article/' + articleId,
+          type: 'put',
+          dataType: "json",
+          contentType: "application/json;charset=utf-8",
+          headers: {
+            Authorization: storage.getItem('token')
+          },
+          data: JSON.stringify(formData),
+          success: function (res) {
+            layer.open({
+              title: '调试'
+              , content: res.message
+            });
+            location.href = 'articleList.html';
+          },
+        })
 
       })
     });

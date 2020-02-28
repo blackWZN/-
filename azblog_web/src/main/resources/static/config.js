@@ -1,5 +1,36 @@
 layui.use('jquery', function () {
     var $ = layui.jquery;
+
+    //系统首页跳转
+    $('#index a').on('click', function () {
+        layer.msg($(this).text(), { icon: -1 });
+        $('#bread a').eq(0).text(
+            $(this).text()
+        );
+        $('#bread a').eq(1).html('');
+        $('#content iframe').attr('src', 'systemIndex.htm');
+    })
+
+    //下拉菜单面包屑导航
+    $('.layui-nav-child a').on('click', function () {
+        layer.msg($(this).text(), { icon: -1 });
+        $('#bread a').eq(0).text(
+            $(this).parents('.layui-nav-child').siblings('a').text()
+        );
+        $('#bread a').eq(1).html(
+            $(this).text()
+        );
+    })
+
+    //没有子菜单的菜单 面包屑导航
+    $('#choice a').on('click', function () {
+        layer.msg($(this).text(), { icon: -1 });
+        $('#bread a').eq(0).text(
+            $(this).text()
+        );
+        $('#bread a').eq(1).html('');
+    })
+
     //文章路由
     $('.layui-nav-tree li').eq(1).find('dl dd').eq(0).on('click', function () {
         $('#content iframe').attr('src', 'article/articleList.html');
@@ -45,7 +76,7 @@ layui.use('jquery', function () {
     })
     //接口文档
     $('.layui-nav-tree li').eq(8).on('click', function () {
-        $('#content iframe').attr('src', 'http://localhost:8202/swagger-ui.html');
+        $('#content iframe').attr('src', '');
     })
 
 })
