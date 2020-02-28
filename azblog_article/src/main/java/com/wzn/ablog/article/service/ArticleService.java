@@ -35,7 +35,6 @@ public class ArticleService{
 
     private Integer totaPage;
 
-
     //加载列表
     public Page<Article> list(Integer page, Integer limit, String userId) {
         Page<Article> list = (Page<Article>) redisTemplate.opsForValue().get("articles" + userId + page);
@@ -54,6 +53,7 @@ public class ArticleService{
         for (String id : ids) {
             articleDao.deleteById(id);
         }
+
         RedisUtils.clearRedis(totaPage, uId, redisTemplate);
 
     }
@@ -90,6 +90,7 @@ public class ArticleService{
         return articleDao.findAll();
     }
 
+    //根据id查找文章
     public Article findById(String id) {
         Optional<Article> article = articleDao.findById(id);
         return article.get();

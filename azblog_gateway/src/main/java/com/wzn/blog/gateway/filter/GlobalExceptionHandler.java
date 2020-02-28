@@ -32,7 +32,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         }else if(throwable instanceof RedisCommandTimeoutException){
             result.setStatus("500").setMessage("连接Redis服务器超时");
         }else if(throwable instanceof ExpiredJwtException){
-            result.setStatus("500").setMessage("token过期");
+            result.setStatus("500").setMessage("身份过期请重新登录");
         }else{
             result.setStatus("500").setMessage(throwable.getMessage());
         }

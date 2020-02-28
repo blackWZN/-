@@ -55,7 +55,7 @@ public class JwtUtils {
      * @param publicKey 公钥
      * @return Jws<Claims>
      */
-    private static Jws<Claims> parserToken(String token, PublicKey publicKey) {
+    public static Jws<Claims> parserToken(String token, PublicKey publicKey) {
         return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
     }
 
