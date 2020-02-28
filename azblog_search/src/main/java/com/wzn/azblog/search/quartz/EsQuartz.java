@@ -27,9 +27,9 @@ public class EsQuartz {
 //    @Scheduled(cron = "0 0/1 * * * ?") //每分钟执行一次
     @Scheduled(cron = "0 0 0/1 * * ? ") // 每一小时执行一次
     public void syncArticle() {
+        esActicleDao.deleteAll();
         System.out.println("同步索引库");
         Result all = searchServce.findAll();
-
         String s = JSON.toJSONString(all.getData());
         List<Article> articles = JSON.parseArray(s, Article.class);
 

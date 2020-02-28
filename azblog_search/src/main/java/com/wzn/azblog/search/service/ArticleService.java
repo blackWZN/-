@@ -2,6 +2,7 @@ package com.wzn.azblog.search.service;
 
 import com.wzn.azblog.search.dao.EsActicleDao;
 import com.wzn.azblog.search.entity.EsArticle;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
