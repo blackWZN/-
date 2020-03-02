@@ -1,6 +1,6 @@
-# 项目介绍
+## 项目介绍
 springboot+springcloud微服务项目
-# 后端技术
+## 后端技术
 
 - SpringBoot
 - SpringCloud
@@ -15,7 +15,7 @@ springboot+springcloud微服务项目
 - Lombok
 - Druid
 
-# 前端技术
+## 前端技术
 
 - layui
 - jQuery

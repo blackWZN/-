@@ -1,11 +1,10 @@
 package com.wzn.ablog.article.service;
 
 import com.wzn.ablog.article.dao.ArticleDao;
-import com.wzn.ablog.article.feign.AdminFeign;
+import com.wzn.ablog.article.utils.MsgSender;
 import com.wzn.ablog.common.entity.Article;
 import com.wzn.ablog.common.utils.IdWorker;
 import com.wzn.ablog.common.utils.RedisUtils;
-import com.wzn.ablog.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @Transactional
-public class ArticleService{
+public class ArticleService {
 
     @Autowired
     private ArticleDao articleDao;
@@ -33,6 +32,9 @@ public class ArticleService{
     @Autowired
     private IdWorker idWorker;
 
+    @Autowired
+    private MsgSender msgSender;
+
     private Integer totaPage;
 
     //加载列表
@@ -41,6 +43,7 @@ public class ArticleService{
         if (list == null) {
             list = articleDao.findAll(PageRequest.of(page - 1, limit, Sort.by("updateTime").descending()));
             totaPage = list.getTotalPages();
+            redisTemplate.opsForValue().set("articleTotaPage", totaPage);
             redisTemplate.opsForValue().set("articles" + userId + page, list);
         } else {
             return list;
@@ -50,18 +53,20 @@ public class ArticleService{
 
     //删除
     public void del(String[] ids, String uId) {
+        msgSender.send("syncIndex");
         for (String id : ids) {
             articleDao.deleteById(id);
         }
-
+        totaPage = (Integer) redisTemplate.opsForValue().get("articleTotaPage");
         RedisUtils.clearRedis(totaPage, uId, redisTemplate);
-
     }
 
     //添加
     public void add(Article reqArticle, String username, String userId) {
+        msgSender.send("syncIndex");
         String isOriginal = reqArticle.getIs_original();
         String recommended = reqArticle.getRecommended();
+        String status = reqArticle.getStatus();
         Article article = new Article()
                 .setId(String.valueOf(idWorker.nextId()))
                 .setTitle(reqArticle.getTitle())
@@ -69,19 +74,38 @@ public class ArticleService{
                 .setCategory_id(reqArticle.getCategory_id())
                 .setIs_original(isOriginal == null ? "0" : isOriginal.equals("on") ? "1" : "0")
                 .setRecommended(recommended == null ? "0" : recommended.equals("on") ? "1" : "0")
-                .setStatus(reqArticle.getStatus().equals("on") ? "1" : "0")//1通过 0待审
+                .setStatus(status == null ? "0" : status.equals("on") ? "1" : "0")//1通过 0待审
                 .setContent(reqArticle.getContent())
                 .setCreate_time(new Date())
                 .setUpdateTime(new Date())
                 .setUsername(username);
         articleDao.save(article);
+        totaPage = (Integer) redisTemplate.opsForValue().get("articleTotaPage");
         RedisUtils.clearRedis(totaPage, userId, redisTemplate);//清除缓存
     }
 
     //更新
-    public void update(Article article, String userId) {
-        articleDao.delete(article);
-        articleDao.save(article);
+    public void update(Article oldArticle, String username, String userId) {
+        msgSender.send("syncIndex");
+        String isOriginal = oldArticle.getIs_original();
+        String recommended = oldArticle.getRecommended();
+        String status = oldArticle.getStatus();
+        Article newArticle = new Article(
+                oldArticle.getId(),
+                oldArticle.getTitle(),
+                oldArticle.getIntro(),
+                oldArticle.getContent(),
+                username,
+                null, oldArticle.getCategory_id(),
+                null, null, null, null,
+                status == null ? "0" : status.equals("on") ? "1" : "0",
+                null,
+                new Date(),
+                isOriginal == null ? "0" : isOriginal.equals("on") ? "1" : "0",
+                recommended == null ? "0" : recommended.equals("on") ? "1" : "0"
+        );
+        articleDao.save(newArticle);
+        totaPage = (Integer) redisTemplate.opsForValue().get("articleTotaPage");
         RedisUtils.clearRedis(totaPage, userId, redisTemplate);
     }
 

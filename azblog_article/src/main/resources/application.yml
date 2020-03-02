@@ -12,7 +12,6 @@ spring:
   jpa:
     open-in-view: true
     show-sql: true
-
   redis:
     host: 192.168.25.136
     port: 6379
@@ -27,6 +26,18 @@ spring:
     sleuth:
       sampler:
         probability: 1.0 #采样的比例
+  rabbitmq:
+    host: 192.168.25.136
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      binders:
+        defaultRabbit:
+          type: rabbit
+      bindings:
+        output:
+          destination: article
 #日志级别
 logging:
   level:

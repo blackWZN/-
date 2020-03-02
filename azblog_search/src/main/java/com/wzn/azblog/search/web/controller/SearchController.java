@@ -2,7 +2,7 @@ package com.wzn.azblog.search.web.controller;
 
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.azblog.search.entity.EsArticle;
-import com.wzn.azblog.search.service.ArticleService;
+import com.wzn.azblog.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     @Autowired
-    private ArticleService articleService;
+    private SearchService articleService;
 
     //文章搜索
     @GetMapping("/{keywords}/{page}/{limit}")

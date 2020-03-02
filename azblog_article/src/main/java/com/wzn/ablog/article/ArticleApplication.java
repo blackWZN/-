@@ -13,7 +13,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
 //exclude排除security自动认证
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class,
@@ -33,4 +32,5 @@ public class ArticleApplication {
     public IdWorker idWorker(){
         return new IdWorker();
     }
+
 }

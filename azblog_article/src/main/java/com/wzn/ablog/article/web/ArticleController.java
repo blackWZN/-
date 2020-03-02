@@ -69,9 +69,10 @@ public class ArticleController {
     }
 
     @ApiOperation("更新文章")
-    @PutMapping("update")
+    @PutMapping
     public Result update(@RequestBody Article article) {
-        articleService.update(article, TokenUtils.getUserId(request,rsaKeyConfig));
+        articleService.update(article, TokenUtils.getUsername(request,rsaKeyConfig),
+                TokenUtils.getUserId(request,rsaKeyConfig));
         return new Result("200", "更新成功");
     }
 
