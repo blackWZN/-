@@ -6,6 +6,10 @@ layui.use(['element', 'jquery', 'layer', 'laytpl'], function () {
     var laytpl = layui.laytpl;
     var storage = window.localStorage;
 
+    if (storage.getItem('token') == '') {
+        location.href = 'login.html';
+    }
+
     //显示用户名
     $.ajax({
         url: 'http://localhost:8202/admin/getUsername',
@@ -32,6 +36,7 @@ layui.use(['element', 'jquery', 'layer', 'laytpl'], function () {
             },
             success: function (data) {
                 if (data.status == '500') {
+                    storage.removeItem('token');
                     layer.open({
                         content: data.message,
                         yes: function (index, layero) {

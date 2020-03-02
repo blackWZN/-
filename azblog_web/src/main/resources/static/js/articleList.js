@@ -15,7 +15,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
         , cols: [[
             { type: 'checkbox', fixed: 'left' }
             , { field: 'id', title: 'id', width: 100, fedit: 'text', unresize: true, sort: true }
-            , { field: 'nickname', title: '发布者', width: 100 }
+            , { field: 'username', title: '发布者', width: 100 }
             , { field: 'title', title: '文章标题', width: 100 }
             , { field: 'intro', title: '文章简介', width: 100 }
             , {
@@ -38,7 +38,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                     return name
                 }
             }
-            , { field: 'updateTime', title: '提交时间', width: 110, sort: true }
+            , { field: 'updateTime', title: '更新时间', width: 110, sort: true }
             , {
                 field: 'status', title: '状态', width: 80, sort: true, templet: function (res) {
                     return res.status == "1" ? "通过" : "待审"
@@ -50,11 +50,11 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                 }
             }
             , {
-                field: 'is_original', title: '是否原创', templet: function (res) {
+                field: 'is_original', title: '是否原创', width: 100, templet: function (res) {
                     return res.is_original == "1" ? "是" : "否"
                 }
             }
-            , { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 }
+            , { fixed: 'right', title: '操作', toolbar: '#barDemo' }
         ]]
         , page: {
             layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -157,7 +157,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
     })
 
     //重置
-    $('.reset').click(function(){
+    $('.reset').click(function () {
         $('#searchVal').val('');
         table.reload('list', {
             url: 'http://localhost:8202/article',
@@ -166,7 +166,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                 limit: 10
             }
         });
-       
-        
+
+
     })
 });
