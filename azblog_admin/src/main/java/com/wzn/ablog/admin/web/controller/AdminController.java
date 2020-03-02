@@ -75,7 +75,8 @@ public class AdminController {
     }
 
     @GetMapping("/refreshToken")
-    public Result refreshToken(String token) {
+    public Result refreshToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         JwtUtils.parserToken(token,rsaKeyConfig.getPublicKey());
         return new Result("200","token未过期");
 
