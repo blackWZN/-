@@ -1,6 +1,8 @@
 package com.wzn.ablog.common.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
@@ -14,6 +16,8 @@ import java.util.Date;
 @Entity
 @Table(name = "article")
 @Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Article implements Serializable {
     @Id
     private String id;
@@ -33,4 +37,6 @@ public class Article implements Serializable {
     private Date updateTime;
     private String is_original;
     private String recommended;
+
+
 }
