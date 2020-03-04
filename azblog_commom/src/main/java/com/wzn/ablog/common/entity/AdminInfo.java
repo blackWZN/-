@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.management.relation.RoleInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +28,7 @@ public class AdminInfo {
 
     private List<Role> roles = new ArrayList<>();
 
+    private String[] resRoles;
 
 
 

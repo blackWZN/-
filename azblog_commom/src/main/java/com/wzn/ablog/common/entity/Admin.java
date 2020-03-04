@@ -50,7 +50,8 @@ public class Admin implements UserDetails{
     )
     private List<Role> roles = new ArrayList<>();
 
-
+    @Transient//忽略该字段的映射
+    private String[] resRoles;
 
     @Override
     public String getUsername(){

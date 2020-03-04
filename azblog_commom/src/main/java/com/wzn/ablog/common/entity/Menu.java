@@ -14,11 +14,11 @@ import java.util.Date;
 public class Menu{
     @Id
     private String id;
-    private String parentid;
-    private String menuname;
-    private String menuicon;
+    private String parentId;
+    private String menuName;
+    private String menuIcon;
     @Column(name = "create_time")
     private Date createTime;
-    private Date updatetime;
+    private Date updateTime;
     private String roles;
 }

@@ -11,8 +11,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 
 @EnableConfigurationProperties(RsaKeyConfig.class)
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,
-        SecurityAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableEurekaClient
 public class GatewayApplication {
     public static void main(String[] args) {

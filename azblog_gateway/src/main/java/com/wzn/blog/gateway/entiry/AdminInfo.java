@@ -28,6 +28,7 @@ public class AdminInfo {
 
     private List<Role> roles = new ArrayList<>();
 
+    private String[] resRoles;
 
 
 

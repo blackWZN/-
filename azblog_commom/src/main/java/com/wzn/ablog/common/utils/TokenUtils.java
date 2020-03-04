@@ -6,7 +6,6 @@ import com.wzn.ablog.common.entity.Role;
 import com.wzn.ablog.common.vo.Payload;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.management.relation.RoleInfo;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
