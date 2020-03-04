@@ -27,6 +27,8 @@ public class AdminTest {
     @Autowired
     private RoleDao roleDao;
 
+
+
     @Test
     public void test1(){
         List<Port> all = PortDao.findAll();
@@ -56,13 +58,13 @@ public class AdminTest {
 
     @Test
     public void test3(){
-        Admin admin = adminDao.findAdminByUsername("297130962@qq.com");
-//        List<com.wzn.ablog.admin.entiry.Role> roles = roleDao.findRolesByAminId(admin.getId());
-        System.out.println(admin.getId());
-//        for (Role role:roles) {
-//            admin.getRoles().add(role);
-//        }
-        System.out.println(admin);
+        Admin admin = new Admin();
+             admin.setUsername("1");
+             admin.setId("1111111");
+             admin.setSex("男");
+        Admin save = adminDao.save(admin);
+
+        System.out.println(save.getId());
     }
 
     @Test
@@ -72,8 +74,7 @@ public class AdminTest {
         System.out.println(o);
     }
 
-    @Autowired
-    private AdminRsaKeyConfig rsaKeyConfig;
+
 
     @Test
     public void test5(){
@@ -86,8 +87,8 @@ public class AdminTest {
         role1.setRole_name("ADMIN");
 //        admin.getRoles().add(role);
 //        admin.getRoles().add(role1);
-        String s = JwtUtils.generateTokenExpireInMinutes(admin, rsaKeyConfig.getPrivateKey(), 60 * 24 * 30);
-        System.out.println(s);
+//        String s = JwtUtils.generateTokenExpireInMinutes(admin, rsaKeyConfig.getPrivateKey(), 60 * 24 * 30);
+//        System.out.println(s);
     }
 
     @Autowired

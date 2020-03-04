@@ -1,10 +1,10 @@
 package com.wzn.ablog.admin.web.controller;
 
 import com.wzn.ablog.admin.service.MenuService;
-import com.wzn.ablog.admin.vo.Result;
 import com.wzn.ablog.common.entity.Menu;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.utils.TokenUtils;
+import com.wzn.ablog.common.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

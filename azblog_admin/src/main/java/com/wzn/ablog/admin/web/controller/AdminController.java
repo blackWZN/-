@@ -1,12 +1,12 @@
 package com.wzn.ablog.admin.web.controller;
 
 import com.wzn.ablog.admin.service.AdminService;
-import com.wzn.ablog.admin.vo.Result;
 import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.utils.JwtUtils;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.utils.TokenUtils;
 import com.wzn.ablog.common.vo.PageResult;
+import com.wzn.ablog.common.vo.Result;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -31,12 +31,14 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    //注册
     @PostMapping("/apply")
     public Result apply(@RequestBody Admin admin) {
         adminService.apply(admin);
         return new Result("200", "你的账号申请已提交，审核结果会发送到您的邮箱");
     }
 
+    //加载用户列表
     @GetMapping
     public PageResult getAdminList(int page, int limit) {
         Page<Admin> list = adminService.getAdminList(page, limit);
@@ -44,10 +46,15 @@ public class AdminController {
                 list.getTotalPages(), list.getContent());
     }
 
-
-    @DeleteMapping("/{userId}")
-    public String del(@PathVariable("userId") String userId) {
-        return "del";
+    //添加用户
+    @PostMapping
+    public Result add(@RequestBody Admin admin){
+        boolean isRepetitive = adminService.adminIsRepetitive(admin.getUsername());
+        if(!isRepetitive){
+            adminService.add(admin);
+            return new Result("200","添加成功");
+        }
+       return new Result("500","用户名重复");
     }
 
     //重置密码
@@ -55,6 +62,13 @@ public class AdminController {
     public Result resetPwd(@PathVariable String id) {
         adminService.resetPwd(id);
         return new Result("200", "密码重置成功");
+    }
+
+    //根据id查找用户
+    @GetMapping("{id}")
+    public Result findById(@PathVariable String id){
+        Admin admin = adminService.findById(id);
+        return new Result("200","查询成功",admin);
     }
 
     //获取用户名
@@ -74,11 +88,20 @@ public class AdminController {
         return new Result("200", "获取到用户名", TokenUtils.getUsername(request, rsaKeyConfig));
     }
 
+    //刷新token
     @GetMapping("/refreshToken")
     public Result refreshToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         JwtUtils.parserToken(token,rsaKeyConfig.getPublicKey());
         return new Result("200","token未过期");
+    }
 
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable String id){
+        boolean b = adminService.delete(id);
+        if(b){
+            return new Result("200","删除成功");
+        }
+        return new Result("500","root用户不可删除");
     }
 }

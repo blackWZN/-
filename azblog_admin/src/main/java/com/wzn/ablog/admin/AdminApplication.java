@@ -1,6 +1,7 @@
 package com.wzn.ablog.admin;
 
 import com.wzn.ablog.admin.config.AdminRsaKeyConfig;
+import com.wzn.ablog.common.utils.IdWorker;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,5 +27,10 @@ public class AdminApplication {
     @Bean
     public RsaKeyConfig rsaKeyConfig(){
         return new RsaKeyConfig();
+    }
+
+    @Bean
+    public IdWorker idWorker(){
+        return new IdWorker();
     }
 }

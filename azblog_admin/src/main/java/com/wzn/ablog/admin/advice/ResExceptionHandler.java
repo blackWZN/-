@@ -1,6 +1,6 @@
 package com.wzn.ablog.admin.advice;
 
-import com.wzn.ablog.admin.vo.Result;
+import com.wzn.ablog.common.vo.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
