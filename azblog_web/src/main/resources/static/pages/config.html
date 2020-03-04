@@ -10,21 +10,12 @@
     <title>Document</title>
 </head>
 
-<body>
-    <form  class="layui-form" action="">
-        <div class="layui-form-item">
-            <label class="layui-form-label">网站名</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
-                    class="layui-input">
-            </div>
-        </div>
-     
-       
+<body> 
+    <form  class="layui-form layui-container" action="">
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">简介</label>
+            <label class="layui-form-label">编辑信息</label>
             <div class="layui-input-block">
-                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <textarea name="desc" id="descEndit" placeholder="请输入内容" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -37,8 +28,10 @@
 
     <script>
         //Demo
-        layui.use('form', function () {
+        layui.use(['form', 'layedit', 'layer', 'laydate', 'jquery'], function () {
             var form = layui.form;
+            var layedit = layui.layedit;
+            var index = layedit.build('descEndit'); //建立编辑器
 
             //监听提交
             form.on('submit(formDemo)', function (data) {

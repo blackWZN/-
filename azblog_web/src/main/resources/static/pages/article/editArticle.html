@@ -109,7 +109,7 @@
           $('form input').eq(0).val(articleDta.title);
           $('form input').eq(1).val(articleDta.intro);
           //获取分类
-          $.get('http://localhost:8203/category/', {
+          $.get('http://localhost:8202/category/', {
             page: 1,
             limit: 10
           }, function (res) {

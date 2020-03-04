@@ -2,3 +2,5 @@ spring:
   thymeleaf:
     prefix: classpath:/static/
     suffix: .html
+server:
+  port: 8888

@@ -55,13 +55,13 @@
           , cols: [[
             { type: 'checkbox', fixed: 'left' }
             , { field: 'id', title: 'ID', width: 100, fedit: 'text', unresize: true, sort: true }
-            , { field: 'username', title: '友情链接标题', width: 120, edit: 'text' }
+            , { field: 'username', title: '标题', width: 120, edit: 'text' }
             , {
-              field: 'email', title: '友情链接介绍', width: 120, edit: 'text', templet: function (res) {
+              field: 'email', title: '介绍', width: 120, edit: 'text', templet: function (res) {
                 return '<em>' + res.email + '</em>'
               }
             }
-            , { field: 'sex', title: '友情链接URL', width: 120 }
+            , { field: 'sex', title: '地址', width: 120 }
             , { field: 'sign', title: '点击数', width: 110}
             , { field: 'experience', title: '状态', width: 80 }
             , { fixed: 'right', title: '操作', toolbar: '#barDemo' }

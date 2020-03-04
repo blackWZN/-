@@ -49,7 +49,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
     //头工具栏事件
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
-        switch (obj.event) {
+        switch (obj.event) {//添加用户
             case 'add':
                 layer.open({
                     title: '添加用户',
@@ -65,7 +65,6 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                     }
                 });
                 break;
-
         };
     });
 
@@ -77,9 +76,8 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                 content: '确定要删除该用户？',
                 yes: function (index, layero) {
                     layer.close(index);
-                    layer.msg('删除' + data.id)
                     $.ajax({
-                        url: '/',
+                        url: 'http://localhost:8202/admin/'+data.id,
                         type: 'delete',
                         dataType: "json",
                         contentType: "application/json;charset=utf-8",
@@ -90,6 +88,8 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                             if (data.status == '200') {
                                 layer.msg(data.message);
                                 table.reload('list', {});
+                            }else{
+                                layer.msg(data.message);
                             }
                         }
                     })
@@ -132,8 +132,6 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                     })
                 }
             });
-
-
         }
     });
 });

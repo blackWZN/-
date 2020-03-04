@@ -95,7 +95,7 @@
 
 
       //获取分类
-      $.get('http://localhost:8203/category/', {
+      $.get('http://localhost:8202/category/', {
         page: 1,
         limit: 10
       }, function (res) {
@@ -113,12 +113,6 @@
       //点击提交
       $('#subBtn').click(function () {
         getFormData();
-
-        layer.open({
-          title: '调试'
-          , content: 111
-        });
-
         $.ajax({
           url: 'http://localhost:8202/article',
           type: 'post',
@@ -129,11 +123,11 @@
           },
           data: JSON.stringify(formData),
           success: function (res) {
-            layer.open({
-              title: '调试'
-              , content: res.message
-            });
-            location.href = 'articleList.html';
+            if (res.message == '200') {
+              window.parent.location.reload();
+            } else {
+              layui.msg(res.message)
+            }
           },
         })
 
