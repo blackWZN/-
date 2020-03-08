@@ -18,7 +18,9 @@
         <module>azblog_web</module>
         <module>azblog_search</module>
         <module>azblog_turbine</module>
+        <module>azblog_base</module>
     </modules>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
