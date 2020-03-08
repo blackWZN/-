@@ -21,7 +21,6 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class Admin implements UserDetails{
     @Id
     private String id;
