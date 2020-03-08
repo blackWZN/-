@@ -18,6 +18,17 @@
         .layui-container {
             margin-top: 10px
         }
+
+        .percentage{
+            margin-bottom: 25px;
+        }
+        .percentage p:nth-child(1){
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .percentage p:nth-child(2){
+           color: #555;
+        }
     </style>
 </head>
 
@@ -50,24 +61,31 @@
         <div class="layui-card-header">图表</div>
         <div class="layui-card-body layui-row">
             <div class="layui-col-md6" id="EchartZhu" style="width: 500px;height: 300px;"></div>
-            <div class="layui-col-md5 ">
-                <p>在线用户</p>
-                <p>同上期增长</p>
-                <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
-                    <div class="layui-progress-bar" lay-percent="50%"></div>
+            <div class="layui-col-md5">
+                <div class="percentage">
+                    <p>在线用户</p>
+                    <p>同上期增长</p>
+                    <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
+                        <div class="layui-progress-bar" lay-percent="50%"></div>
+                    </div>
                 </div>
 
-                <p>文章数量</p>
-                <p>同上期增长</p>
-                <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
-                    <div class="layui-progress-bar layui-bg-blue" lay-percent="50%"></div>
+                <div class="percentage">
+                    <p>文章数量</p>
+                    <p>同上期增长</p>
+                    <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
+                        <div class="layui-progress-bar layui-bg-blue" lay-percent="50%"></div>
+                    </div>
                 </div>
 
-                <p>网站访客</p>
-                <p>同上期增长</p>
-                <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
-                    <div class="layui-progress-bar layui-bg-orange" lay-percent="50%"></div>
+                <div class="percentage">
+                    <p>网站访客</p>
+                    <p>同上期增长</p>
+                    <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
+                        <div class="layui-progress-bar layui-bg-orange" lay-percent="50%"></div>
+                    </div>
                 </div>
+
             </div>
 
         </div>
