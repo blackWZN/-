@@ -23,8 +23,6 @@ public class EsQuartz {
     @Autowired
     private EsActicleDao esActicleDao;
 
-//    @Scheduled(fixedRate = 10000)//每10秒执行一次
-//    @Scheduled(cron = "0 0/1 * * * ?") //每分钟执行一次
     @Scheduled(cron = "0 0 0/1 * * ? ") // 每一小时执行一次
     public void syncArticle() {
         esActicleDao.deleteAll();
