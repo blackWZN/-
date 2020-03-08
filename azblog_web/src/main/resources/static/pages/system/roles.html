@@ -41,6 +41,8 @@
     <script type="text/html" id="bar">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">接口权限</a>
+
   </script>
 
 
@@ -59,10 +61,10 @@
           }
           , cols: [[
             { type: 'checkbox', fixed: 'left' }
-            , { field: 'id', title: '角色名', width: 120, fedit: 'text', unresize: true, sort: true }
-            , { field: 'name', title: '备注', width: 120, edit: 'text' }
-            , { fixed: 'right', title: '创建时间' }
-            , { fixed: 'right', title: '操作', toolbar: '#barDemo' }
+            , { field: 'id', title: 'id', width: 120, fedit: 'text', unresize: true, sort: true }
+            , { field: 'name', title: '角色名', width: 120, edit: 'text' }
+            , { fixed: 'right', title: '备注' }
+            , { fixed: 'right', title: '操作', toolbar: '#bar' }
           ]]
           , page: {
             layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
