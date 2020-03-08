@@ -1,5 +1,6 @@
 ## 项目介绍
-springboot+springcloud微服务项目
+springboot+springcloud微服务架构的博客后台管理系统
+
 ## 后端技术
 
 - SpringBoot
@@ -19,3 +20,15 @@ springboot+springcloud微服务项目
 
 - layui
 - jQuery
+
+
+
+## 项目环境
+
+- jdk1.8
+- maven
+- redis
+- rabbitmq
+- mysql
+- Elasticsearch
+
