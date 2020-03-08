@@ -20,7 +20,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh # http://localhost:9999/actuator/refresh
+        include: bus-refresh # http://localhost:9999/actuator/refresh
 eureka:
   client:
     service-url:
