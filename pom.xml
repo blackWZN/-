@@ -19,6 +19,7 @@
         <module>azblog_search</module>
         <module>azblog_turbine</module>
         <module>azblog_base</module>
+        <module>azblog_Statistics</module>
     </modules>
 
 

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 public class AzResult {
 
     private int status;
-    private String msg;
+    private String message;
     private Object data;
 
     private AzResult() {
@@ -24,7 +24,7 @@ public class AzResult {
     public static AzResult ok(int status, String msg) {
         AzResult azResult = new AzResult();
         azResult.setStatus(status);
-        azResult.setMsg(msg);
+        azResult.setMessage(msg);
         return azResult;
     }
 
@@ -39,7 +39,7 @@ public class AzResult {
     public static AzResult err(int status, String msg) {
         AzResult azResult = new AzResult();
         azResult.setStatus(status);
-        azResult.setMsg(msg);
+        azResult.setMessage(msg);
         return azResult;
     }
 

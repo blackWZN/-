@@ -16,7 +16,7 @@ public class Category implements Serializable {
     @Id
     private String id;
     private String name;
-    private String create_time;
-    private String update_time;
+    private String createTime;
+    private String updateTime;
     private String status;
 }

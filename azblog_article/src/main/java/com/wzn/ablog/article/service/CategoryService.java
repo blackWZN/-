@@ -21,10 +21,12 @@ public class CategoryService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    //查找全部
     public Page<Category> list(Integer page, Integer limit){
         return categoryDao.findAll(PageRequest.of(page-1,limit));
     }
 
+    //根据id查找
     public String findNameById(String id){
         String name = (String) redisTemplate.opsForValue().get(id);
         if(name == null){
@@ -34,5 +36,22 @@ public class CategoryService {
             return name;
         }
         return name;
+    }
+
+    //根据id删除
+    public void del(String[] ids) {
+        for(String id : ids){
+            categoryDao.deleteById(id);
+        }
+    }
+
+    //添加
+    public void add(Category category) {
+        categoryDao.save(category);
+    }
+
+    //更新
+    public void update(Category category) {
+        categoryDao.save(category);
     }
 }

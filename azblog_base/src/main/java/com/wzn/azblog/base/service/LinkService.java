@@ -35,7 +35,11 @@ public class LinkService {
 
     public Link findById(String id) {
         Link link = linkDao.findById(id).get();
-
         return link;
+    }
+
+    public List<Link> search(String keywords){
+        List<Link> list = linkDao.search(keywords);
+        return list;
     }
 }

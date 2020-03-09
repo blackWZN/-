@@ -14,12 +14,11 @@ import java.util.Date;
 public class Comment implements Serializable {
     @Id
     private String id;
-    private String user_id;
-    private String article_id;
-    private String user_name;
+    private String articleId;
+    private String username;
     private String content;
     private String status;
     private String avatar;
-    private Date create_time;
-    private Date update_time;
+    private Date createTime;
+    private Date updateTime;
 }

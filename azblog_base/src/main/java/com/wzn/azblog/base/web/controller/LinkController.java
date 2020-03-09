@@ -41,4 +41,10 @@ public class LinkController {
         Link link =  linkService.findById(id);
         return AzResult.ok().data(link);
     }
+
+    @GetMapping("/search/{keywords}")
+    public AzResult search(@PathVariable String keywords){
+        List<Link> list = linkService.search(keywords);
+        return AzResult.ok().data(list);
+    }
 }
