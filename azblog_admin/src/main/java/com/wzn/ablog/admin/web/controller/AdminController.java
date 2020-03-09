@@ -5,6 +5,8 @@ import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.utils.JwtUtils;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.utils.TokenUtils;
+import com.wzn.ablog.common.utils.blogUtils;
+import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.ablog.common.vo.Result;
 import io.jsonwebtoken.Claims;
@@ -13,9 +15,13 @@ import io.jsonwebtoken.Jws;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -31,11 +37,35 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private MailSender mailSender;
+
+    //邮件验证码
+    @GetMapping("/code")
+    public AzResult code(String phone) {
+        String code = blogUtils.code(request);
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("AZ博客");
+        message.setText("注册验证码为：" + code);
+        message.setTo(phone);
+        message.setFrom("1478981855@qq.com");
+        mailSender.send(message);
+        return AzResult.ok().data("验证码已发送到您的邮箱");
+    }
+
     //注册
     @PostMapping("/apply")
-    public Result apply(@RequestBody Admin admin) {
-        adminService.apply(admin);
-        return new Result("200", "你的账号申请已提交，审核结果会发送到您的邮箱");
+    public AzResult apply(@RequestBody Map<String, String> params) {
+        String code = blogUtils.getCode(request);
+        for (Map.Entry<String, String> map : params.entrySet()){
+            if(map.getKey().equals("code")){
+               if(map.getValue().equals(code)){
+                   adminService.apply(params);
+                   return AzResult.ok("注册成功");
+               }
+            }
+        }
+        return AzResult.err("验证码错误");
     }
 
     //加载用户列表
@@ -48,13 +78,13 @@ public class AdminController {
 
     //添加用户
     @PostMapping
-    public Result add(@RequestBody Admin admin){
+    public Result add(@RequestBody Admin admin) {
         boolean isRepetitive = adminService.adminIsRepetitive(admin.getUsername());
-        if(!isRepetitive){
+        if (!isRepetitive) {
             adminService.add(admin);
-            return new Result("200","添加成功");
+            return new Result("200", "添加成功");
         }
-       return new Result("500","用户名重复");
+        return new Result("500", "用户名重复");
     }
 
     //重置密码
@@ -66,9 +96,9 @@ public class AdminController {
 
     //根据id查找用户
     @GetMapping("{id}")
-    public Result findById(@PathVariable String id){
+    public Result findById(@PathVariable String id) {
         Admin admin = adminService.findById(id);
-        return new Result("200","查询成功",admin);
+        return new Result("200", "查询成功", admin);
     }
 
     //获取用户名
@@ -92,16 +122,16 @@ public class AdminController {
     @GetMapping("/refreshToken")
     public Result refreshToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        JwtUtils.parserToken(token,rsaKeyConfig.getPublicKey());
-        return new Result("200","token未过期");
+        JwtUtils.parserToken(token, rsaKeyConfig.getPublicKey());
+        return new Result("200", "token未过期");
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String id){
+    public Result delete(@PathVariable String id) {
         boolean b = adminService.delete(id);
-        if(b){
-            return new Result("200","删除成功");
+        if (b) {
+            return new Result("200", "删除成功");
         }
-        return new Result("500","root用户不可删除");
+        return new Result("500", "root用户不可删除");
     }
 }

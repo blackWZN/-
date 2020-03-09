@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -37,14 +39,23 @@ public class AdminService implements UserDetailsService {
     @Autowired
     private IdWorker idWorker;
 
+    //登录
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Admin admin = adminDao.findAdminByUsername(s);
-
         return admin;
     }
 
     //申请账号
-    public void apply(Admin admin) {
+    public void apply(Map<String,String> params) {
+        Admin admin = new Admin();
+        Stream.of(params).forEach(map->{
+            admin.setId(idWorker.nextId()+"");
+            admin.setUsername(map.get("username"));
+            admin.setPassword(encoder.encode(map.get("password")));
+            admin.setSex("男");
+            admin.setEmail(map.get("email"));
+            admin.setStatus("1");
+        });
         adminDao.save(admin);
     }
 

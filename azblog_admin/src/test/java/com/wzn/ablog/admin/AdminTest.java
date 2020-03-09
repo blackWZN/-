@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -105,4 +107,8 @@ public class AdminTest {
         roles1.stream().sorted((a,b)->a.getId().compareTo(b.getId())).forEach(System.out::println);
         System.out.println(roles1.size());
     }
+
+
+
+
 }

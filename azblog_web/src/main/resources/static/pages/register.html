@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../layui\css\layui.css">
-    <title>登录页面</title>
+    <script src="../layui/layui.js"></script>
+    <title>注册页面</title>
     <style>
         .layui-form {
             position: absolute;
@@ -43,16 +44,15 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">邮箱</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" required lay-verify="required" placeholder="请输入邮箱"
+                        <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱"
                             autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                        <input type="text" name="code" required lay-verify="required" placeholder="请输入密码"
                             autocomplete="off" class="layui-input">
-
                         <button id="codeBtn" class="layui-btn" lay-submit lay-filter="formDemo">获取验证码</button>
 
                     </div>
@@ -62,7 +62,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="password" required lay-verify="required" placeholder="请输入密码"
+                        <input type="text" name="username" required lay-verify="required" placeholder="请输入密码"
                             autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -89,6 +89,39 @@
         </div>
 
     </form>
+    <script>
+        layui.use(['form', 'jquery'], function () {
+            var form = layui.form;
+            var $ = layui.jquery;
+
+    
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.load(2);
+                $.ajax({
+                    url: 'http://localhost:8202/admin/apply',
+                    type: 'post',
+                    data: JSON.stringify(data.field),
+                    dataType: "json",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        layer.closeAll('loading');
+                        if (data.status == '200') {
+                            layer.msg(data.message, {
+                                icon: 6,//成功的表情
+                                time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+
+                            });
+                        } else {
+                            layer.msg(data.message, { icon: 2, time: 1000 });
+                        }
+                    }
+                })
+                return false;
+            });
+        });
+    </script>
 </body>
 
 </html>
