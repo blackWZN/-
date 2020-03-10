@@ -7,9 +7,11 @@ import com.wzn.ablog.common.vo.Payload;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -26,7 +28,15 @@ public class AuthorityAspect {
     @Autowired
     private RsaKeyConfig rsaKeyConfig;
 
-    @Around("execution(* com.wzn.ablog.admin.web.controller.AdminController.del*(..))")
+    @Pointcut("execution(* com.wzn.ablog.admin.web.controller.*.*(..))")
+    public void pointCut() {
+    }
+
+    @Pointcut("@annotation(com.wzn.ablog.common.annotation.Authorized)")
+    public void authorized() {
+    }
+
+    @Around("pointCut() && authorized()")
     public Object GrantedAuthorityRoot(ProceedingJoinPoint joinPoint) throws Throwable {
         String userId = getUserId(request);
         List<String> list = (List<String>) redisTemplate.opsForValue().get("roles" + userId);
@@ -36,18 +46,7 @@ public class AuthorityAspect {
             Object proceed = joinPoint.proceed();
             return proceed;
         }
-        return "权限不足";
-    }
-
-    @Around("execution(* com.wzn.ablog.admin.web.controller.AdminController.add*(..))")
-    public Object GrantedAuthorityAdmin(ProceedingJoinPoint joinPoint) throws Throwable {
-        String userId = getUserId(request);
-        List<String> list = (List<String>) redisTemplate.opsForValue().get("roles" + userId);
-        if (list != null &&  list.contains("ADMIN")) {
-            Object proceed = joinPoint.proceed();
-            return proceed;
-        }
-        return "权限不足";
+        throw new RuntimeException("权限不足");
     }
 
     public String getUserId(HttpServletRequest request) {

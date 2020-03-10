@@ -48,8 +48,9 @@ public class AdminService implements UserDetailsService {
     //申请账号
     public void apply(Map<String,String> params) {
         Admin admin = new Admin();
+        String id = idWorker.nextId() + "";
         Stream.of(params).forEach(map->{
-            admin.setId(idWorker.nextId()+"");
+            admin.setId(id);
             admin.setUsername(map.get("username"));
             admin.setPassword(encoder.encode(map.get("password")));
             admin.setSex("男");
@@ -57,6 +58,7 @@ public class AdminService implements UserDetailsService {
             admin.setStatus("1");
         });
         adminDao.save(admin);
+        adminDao.setRoles(idWorker.nextId()+"",id,"2");
     }
 
     //根据id查找用户名

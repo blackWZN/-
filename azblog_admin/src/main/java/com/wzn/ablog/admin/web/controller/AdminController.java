@@ -1,6 +1,7 @@
 package com.wzn.ablog.admin.web.controller;
 
 import com.wzn.ablog.admin.service.AdminService;
+import com.wzn.ablog.common.annotation.Authorized;
 import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.utils.JwtUtils;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
@@ -9,19 +10,14 @@ import com.wzn.ablog.common.utils.blogUtils;
 import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.ablog.common.vo.Result;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -69,6 +65,7 @@ public class AdminController {
     }
 
     //加载用户列表
+    @Authorized
     @GetMapping
     public PageResult getAdminList(int page, int limit) {
         Page<Admin> list = adminService.getAdminList(page, limit);
@@ -77,6 +74,7 @@ public class AdminController {
     }
 
     //添加用户
+    @Authorized
     @PostMapping
     public Result add(@RequestBody Admin admin) {
         boolean isRepetitive = adminService.adminIsRepetitive(admin.getUsername());
@@ -88,6 +86,7 @@ public class AdminController {
     }
 
     //重置密码
+    @Authorized
     @PutMapping("/resetPwd/{id}")
     public Result resetPwd(@PathVariable String id) {
         adminService.resetPwd(id);
@@ -95,6 +94,7 @@ public class AdminController {
     }
 
     //根据id查找用户
+    @Authorized
     @GetMapping("{id}")
     public Result findById(@PathVariable String id) {
         Admin admin = adminService.findById(id);
@@ -102,6 +102,7 @@ public class AdminController {
     }
 
     //获取用户名
+    @Authorized
     @PostMapping("/getUserame/{id}")
     public Result getUsernameById(@PathVariable String id) {
         log.debug(TokenUtils.getUserId(request, rsaKeyConfig));
@@ -126,6 +127,7 @@ public class AdminController {
         return new Result("200", "token未过期");
     }
 
+    @Authorized
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
         boolean b = adminService.delete(id);
