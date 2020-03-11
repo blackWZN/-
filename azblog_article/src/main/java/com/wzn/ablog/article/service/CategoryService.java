@@ -10,6 +10,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
@@ -53,5 +55,10 @@ public class CategoryService {
     //更新
     public void update(Category category) {
         categoryDao.save(category);
+    }
+
+    //不分页查找全部
+    public List<Category> list(){
+        return categoryDao.findAll();
     }
 }

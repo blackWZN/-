@@ -9,4 +9,14 @@ public class SearchFeignFallback implements SearchFeign {
     public PageResult search(String keywords, Integer page, Integer limit) {
         return new PageResult("500","搜索服务不可用");
     }
+
+    @Override
+    public PageResult searchCategroy(String keywords, Integer page, Integer limit) {
+        return new PageResult("500","搜索服务不可用");
+    }
+
+    @Override
+    public PageResult searchComment(String keywords, Integer page, Integer limit) {
+        return new PageResult("500","搜索服务不可用");
+    }
 }

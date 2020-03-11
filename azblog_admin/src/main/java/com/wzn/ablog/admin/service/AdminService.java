@@ -106,6 +106,7 @@ public class AdminService implements UserDetailsService {
         return false;
     }
 
+    //根据id删除
     public boolean delete(String id){
         Admin admin = adminDao.findById(id).get();
         adminDao.deleteRolesByAdminId(id);
@@ -114,5 +115,11 @@ public class AdminService implements UserDetailsService {
         }
         adminDao.deleteById(id);
         return true;
+    }
+
+    //根据用户名搜索
+    public List<Admin> searchByUsername(String username){
+        List<Admin> admins = adminDao.findByUsernameLike(username);
+        return admins;
     }
 }

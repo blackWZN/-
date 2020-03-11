@@ -54,4 +54,10 @@ public class RoleService {
             roleDao.deleteById(id);
         }
     }
+
+    //根据权限名搜索
+    public List<Role> searchRole(String roleName){
+        List<Role> roles = roleDao.findByRoleNameLink(roleName);
+        return roles;
+    }
 }

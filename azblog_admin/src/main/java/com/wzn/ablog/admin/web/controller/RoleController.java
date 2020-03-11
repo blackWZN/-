@@ -16,13 +16,13 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
     
-    @GetMapping
+    @GetMapping("/roleList")
     public AzResult roleList(){
         List<Role> list = roleService.roleList();
         return  AzResult.ok().data(list);
     }
 
-    @GetMapping
+    @GetMapping("/portList")
     public AzResult portList(){
         List<Port> ports = roleService.portList();
         return  AzResult.ok().data(ports);
@@ -50,5 +50,11 @@ public class RoleController {
     public AzResult update(@RequestBody Role Role){
         roleService.update(Role);
         return AzResult.ok("更新成功");
+    }
+
+    @GetMapping("search/{roleName}")
+    public AzResult searchRole(@PathVariable String roleName){
+        List<Role> roles = roleService.searchRole(roleName);
+        return AzResult.ok().data(roles);
     }
 }

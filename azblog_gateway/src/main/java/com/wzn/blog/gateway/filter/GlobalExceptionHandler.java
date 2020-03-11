@@ -27,14 +27,10 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             result.setStatus("500").setMessage("请登录后操作");
         } else if (throwable instanceof SignatureException) {
             result.setStatus("500").setMessage("token错误");
-        } else  if(throwable instanceof RedisConnectionException){
-            result.setStatus("500").setMessage("无法连接Redis服务器");
-        }else if(throwable instanceof RedisCommandTimeoutException){
-            result.setStatus("500").setMessage("连接Redis服务器超时");
-        }else if(throwable instanceof ExpiredJwtException){
+        } else if(throwable instanceof ExpiredJwtException){
             result.setStatus("500").setMessage("身份过期请重新登录");
         }else{
-            result.setStatus("500").setMessage(throwable.getMessage());
+            result.setStatus("500").setMessage("服务异常");
         }
 
         DataBufferFactory bufferFactory = serverWebExchange.getResponse().bufferFactory();

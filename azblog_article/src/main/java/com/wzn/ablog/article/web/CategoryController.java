@@ -1,5 +1,6 @@
 package com.wzn.ablog.article.web;
 
+import com.wzn.ablog.article.feign.SearchFeign;
 import com.wzn.ablog.article.service.CategoryService;
 import com.wzn.ablog.common.entity.Category;
 import com.wzn.ablog.common.vo.AzResult;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -16,12 +19,20 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private SearchFeign searchFeign;
+
     //查找全部
     @GetMapping
     public PageResult list(Integer page, Integer limit){
         Page<Category> pageInfo = categoryService.list(page, limit);
         return new PageResult("0","列表加载成功",pageInfo.getTotalElements()
         ,pageInfo.getTotalPages(),pageInfo.getContent());
+    }
+
+    @GetMapping("/all")
+    public List<Category> all(){
+      return categoryService.list();
     }
 
     //根据id查找
@@ -50,5 +61,10 @@ public class CategoryController {
     public AzResult update(@RequestBody Category category){
         categoryService.update(category);
         return AzResult.ok("更新成功");
+    }
+
+    @GetMapping("/search")
+    public PageResult search(String keywords,int page,int limit){
+        return searchFeign.searchCategroy(keywords, page, limit);
     }
 }

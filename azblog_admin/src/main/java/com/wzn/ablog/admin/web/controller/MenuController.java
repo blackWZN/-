@@ -28,7 +28,7 @@ public class MenuController{
     private MenuService menuService;
 
     //根据权限加载菜单
-    @GetMapping
+    @GetMapping("/byRole")
     public Result list(){
         List<Menu> roleList = menuService.listByAuth(TokenUtils.getRoles(request,rsaKeyConfig));
         if(roleList == null){
@@ -66,5 +66,12 @@ public class MenuController{
     public AzResult update(@RequestBody Menu Menu){
         menuService.update(Menu);
         return AzResult.ok("更新成功");
+    }
+
+    //根据菜单名搜索
+    @GetMapping("/search/{menuName}")
+    public AzResult searchMenu(@PathVariable String menuName){
+        List<Menu> menus = menuService.searchMenu(menuName);
+        return AzResult.ok().data(menus);
     }
 }

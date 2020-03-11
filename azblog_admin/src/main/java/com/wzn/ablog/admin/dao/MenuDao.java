@@ -12,4 +12,7 @@ public interface MenuDao extends JpaRepository<Menu, String>, JpaSpecificationEx
 
     @Query(value = "SELECT * FROM sys_menu WHERE roles = :roles",nativeQuery = true)
     List<Menu> findByRoles(@Param("roles") String roles);
+
+    @Query(value = "SELECT * FROM sys_menu WHERE menu_name LIKE CONCAT('%',:menuName,'%')",nativeQuery = true)
+    List<Menu> findBymenuNameLink(String menuName);
 }

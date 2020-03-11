@@ -1,5 +1,6 @@
 package com.wzn.ablog.article.web;
 
+import com.wzn.ablog.article.feign.SearchFeign;
 import com.wzn.ablog.article.service.CommentService;
 import com.wzn.ablog.common.entity.Comment;
 import com.wzn.ablog.common.vo.AzResult;
@@ -8,12 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("comment")
 public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private SearchFeign searchFeign;
 
     @GetMapping
     public PageResult list(int page,int limit){
@@ -44,5 +50,16 @@ public class CommentController {
     public AzResult update(@RequestBody Comment comment){
         commentService.update(comment);
         return AzResult.ok("更新成功");
+    }
+
+    @GetMapping("/all")
+    public List<Comment> allComment(){
+        List<Comment> all =  commentService.all();
+        return all;
+    }
+
+    @GetMapping("/search")
+    public PageResult search(String keywords,int page,int limit){
+        return searchFeign.searchComment(keywords, page, limit);
     }
 }

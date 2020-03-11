@@ -57,4 +57,9 @@ public class MenuService {
             menuDao.deleteById(id);
         }
     }
+
+    //根据菜单名搜索
+    public List<Menu> searchMenu(String menuName){
+        return menuDao.findBymenuNameLink(menuName);
+    }
 }

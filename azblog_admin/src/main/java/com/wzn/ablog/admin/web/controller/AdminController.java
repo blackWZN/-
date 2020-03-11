@@ -17,6 +17,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -127,6 +128,7 @@ public class AdminController {
         return new Result("200", "token未过期");
     }
 
+    //根据id删除
     @Authorized
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
@@ -135,5 +137,12 @@ public class AdminController {
             return new Result("200", "删除成功");
         }
         return new Result("500", "root用户不可删除");
+    }
+
+    //根据用户名搜索
+    @GetMapping("search/{username}")
+    public AzResult searchByUsername(@PathVariable String username){
+        List<Admin> admins = adminService.searchByUsername(username);
+        return AzResult.ok().data(admins);
     }
 }

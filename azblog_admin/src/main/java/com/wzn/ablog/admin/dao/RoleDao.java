@@ -24,4 +24,7 @@ public interface RoleDao extends JpaRepository<Role,String>, JpaSpecificationExe
     @Query(value = "SELECT * FROM sys_role WHERE role_id \n" +
             "IN(SELECT role_id FROM sys_port_role WHERE port_id = :portId)",nativeQuery=true)
     List<Role> findRolesByPortId(@Param("portId") String portId);
+
+    @Query(value = "SELECT * FROM sys_role WHERE role_name LIKE CONCAT('%',:roleName,'%')",nativeQuery = true)
+    List<Role> findByRoleNameLink(String roleName);
 }

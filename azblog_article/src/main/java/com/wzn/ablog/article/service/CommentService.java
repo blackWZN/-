@@ -51,5 +51,8 @@ public class CommentService {
         }
     }
 
-
+    //查找全部b不分页
+    public List<Comment> all() {
+        return commentDao.findAll();
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface AdminDao extends JpaRepository<Admin, String>, JpaSpecificationExecutor<Admin> {
 
     @Query(value = "SELECT * FROM admin WHERE username = :username " +
@@ -36,4 +38,8 @@ public interface AdminDao extends JpaRepository<Admin, String>, JpaSpecification
     @Query(value = "DELETE FROM sys_admin_role WHERE admin_id = :adminId",nativeQuery = true)
     @Modifying
     void deleteRolesByAdminId(String adminId);
+
+    //根据username模糊查询
+    @Query(value = "SELECT * FROM admin WHERE username LIKE CONCAT('%',:username,'%')",nativeQuery = true)
+    List<Admin> findByUsernameLike(String username);
 }
