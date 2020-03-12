@@ -9,6 +9,7 @@
     <script src="../layui/layui.all.js"></script>
     <script src="../layui/layui.js"></script>
     <script src="../js/echarts.min.js"></script>
+    <script src="../js/jquery-1.12.0.js"></script>
     <title>Document</title>
     <style>
         body {
@@ -19,15 +20,17 @@
             margin-top: 10px
         }
 
-        .percentage{
+        .percentage {
             margin-bottom: 25px;
         }
-        .percentage p:nth-child(1){
+
+        .percentage p:nth-child(1) {
             font-size: 16px;
             font-weight: bold;
         }
-        .percentage p:nth-child(2){
-           color: #555;
+
+        .percentage p:nth-child(2) {
+            color: #555;
         }
     </style>
 </head>
@@ -96,6 +99,8 @@
             var element = layui.element;
         });
 
+        var storage = window.localStorage;
+
         // 初始化图表
         var myChart = echarts.init(document.getElementById('EchartZhu'));
 
@@ -104,16 +109,16 @@
             legend: {},
             tooltip: {},
             dataset: {
-                dimensions: ['name', '在线用户', '文章数量', '网站访客'],
-                source: [
-                    { name: '周一', '在线用户': 43.3, '文章数量': 85.8, '网站访客': 93.7 },
-                    { name: '周二', '在线用户': 83.1, '文章数量': 73.4, '网站访客': 55.1 },
-                    { name: '周三', '在线用户': 86.4, '文章数量': 65.2, '网站访客': 82.5 },
-                    { name: '周四', '在线用户': 72.4, '文章数量': 53.9, '网站访客': 39.1 },
-                    { name: '周五', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 },
-                    { name: '周六', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 },
-                    { name: '周日', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 }
-                ]
+                // dimensions: ['name', '在线用户', '文章数量', '网站访客'],
+                // source: [
+                //     { name: '周一', '在线用户': 43.3, '文章数量': 85.8, '网站访客': 93.7 },
+                //     { name: '周二', '在线用户': 83.1, '文章数量': 73.4, '网站访客': 55.1 },
+                //     { name: '周三', '在线用户': 86.4, '文章数量': 65.2, '网站访客': 82.5 },
+                //     { name: '周四', '在线用户': 72.4, '文章数量': 53.9, '网站访客': 39.1 },
+                //     { name: '周五', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 },
+                //     { name: '周六', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 },
+                //     { name: '周日', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 }
+                // ]
             },
             xAxis: { type: 'category' },
             yAxis: {},
@@ -124,7 +129,22 @@
             ]
         };
 
-        myChart.setOption(option);
+        $.ajax({
+            url: 'http://127.0.0.1:8202/echarts/dataset',
+            type: 'get',
+            headers: {
+                Authorization: storage.getItem('token')
+            },
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.status == '200') {
+                    option.dataset = data.data;
+                    myChart.setOption(option);
+                }
+            }
+        })
+
 
     </script>
 </body>
