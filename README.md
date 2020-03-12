@@ -22,14 +22,3 @@
 - layui
 - jQuery
 
-
-
-## 项目环境
-
-- jdk1.8
-- maven
-- redis
-- rabbitmq
-- mysql
-- Elasticsearch
-
