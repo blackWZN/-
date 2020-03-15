@@ -6,7 +6,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
 
     table.render({
         elem: '#list'
-        , url: 'http://localhost:8202/article'
+        , url: 'http://localhost:8202/article/article'
         , toolbar: '#toolbarDemo'
         , title: '用户数据表'
         , headers: {
@@ -22,7 +22,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                 field: 'category_id', title: '分类', width: 100, templet: function (res) {
                     var name = '';
                     $.ajax({
-                        url: 'http://localhost:8202/category/' + res.category_id,
+                        url: 'http://localhost:8202/category/category/' + res.category_id,
                         type: 'get',
                         dataType: "json",
                         async: false,
@@ -95,7 +95,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                 })
                 layer.msg(JSON.stringify(ids))
                 $.ajax({
-                    url: 'http://localhost:8202/article/' + ids,
+                    url: 'http://localhost:8202/article/article/' + ids,
                     type: 'delete',
                     dataType: "json",
                     contentType: "application/json;charset=utf-8",
@@ -106,6 +106,8 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                         if (data.status == '200') {
                             layer.msg(data.message);
                             table.reload('list', {});
+                        }else{
+                            layer.msg(data.message);
                         }
                     },
                 })
@@ -118,7 +120,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
         var data = obj.data;
         if (obj.event === 'del') { //单个删除
             $.ajax({
-                url: 'http://localhost:8202/article/' + data.id,
+                url: 'http://localhost:8202/article/article/' + data.id,
                 type: 'delete',
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
@@ -129,6 +131,8 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                     if (data.status == '200') {
                         layer.msg(data.message);
                         table.reload('list', {});
+                    }else{
+                        layer.msg(data.message);
                     }
                 }
             })
@@ -152,7 +156,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
     $('#searchArticle').click(function () {
         var keyword = $('#searchVal').val();
         table.reload('list', {
-            url: 'http://localhost:8202/search/' + keyword + '/1/10'
+            url: 'http://localhost:8202/article/article/' + keyword + '/1/10'
         });
     })
 
@@ -160,7 +164,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
     $('.reset').click(function () {
         $('#searchVal').val('');
         table.reload('list', {
-            url: 'http://localhost:8202/article',
+            url: 'http://localhost:8202/article/article',
             where: {
                 page: 1,
                 limit: 10

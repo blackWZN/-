@@ -84,6 +84,7 @@
       var index = layedit.build('descEndit'); //建立编辑器
       var formData = {};
 
+
       //获取表单数据
       function getFormData() {
         var t = $('#addForm').serializeArray();
@@ -95,26 +96,36 @@
 
 
       //获取分类
-      $.get('http://localhost:8202/category/', {
-        page: 1,
-        limit: 10
-      }, function (res) {
-        var cate = $('#loadCate');
-        var data = res.data;
-        $.each(data, function (i, item) {
-          var option = $('<option />');
-          option.attr('value', item.id);
-          option.text(item.name);
-          option.appendTo(cate);
-          form.render("select");
-        })
+      $.ajax({
+        url: 'http://localhost:8202/category/category?page=1&&limit=10',
+        type: 'get',
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        headers: {
+          Authorization: storage.getItem('token')
+        },
+        success: function (res) {
+          if (res.status == '0') {
+            var cate = $('#loadCate');
+            var data = res.data;
+            $.each(data, function (i, item) {
+              var option = $('<option />');
+              option.attr('value', item.id);
+              option.text(item.name);
+              option.appendTo(cate);
+              form.render("select");
+            })
+          } else {
+            layer.msg(res.message)
+          }
+        }
       })
 
       //点击提交
       $('#subBtn').click(function () {
         getFormData();
         $.ajax({
-          url: 'http://localhost:8202/article',
+          url: 'http://localhost:8202/article/article',
           type: 'post',
           dataType: "json",
           contentType: "application/json;charset=utf-8",
@@ -123,10 +134,13 @@
           },
           data: JSON.stringify(formData),
           success: function (res) {
-            if (res.message == '200') {
-              window.parent.location.reload();
+            if (res.status == '200') {
+              layer.msg(res.data);
+              // setTimeout(function(){
+              //   window.parent.location.reload();
+              // },3000)
             } else {
-              layui.msg(res.message)
+              layer.msg(res.message)
             }
           },
         })

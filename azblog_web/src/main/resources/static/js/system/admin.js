@@ -5,7 +5,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
     var layer = layui.layer;
     table.render({
         elem: '#list'
-        , url: 'http://localhost:8202/admin'
+        , url: 'http://localhost:8202/admin/admin/'
         , toolbar: '#toolbarTop' //开启头部工具栏，并为其绑定左侧模板
         , title: '数据表'
         , headers: {
@@ -77,7 +77,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                 yes: function (index, layero) {
                     layer.close(index);
                     $.ajax({
-                        url: 'http://localhost:8202/admin/'+data.id,
+                        url: 'http://localhost:8202/admin/admin/'+data.id,
                         type: 'delete',
                         dataType: "json",
                         contentType: "application/json;charset=utf-8",
@@ -116,7 +116,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                 yes: function (index, layero) {
                     layer.close(index);
                     $.ajax({
-                        url: 'http://localhost:8202/admin/resetPwd/' + data.id,
+                        url: 'http://localhost:8202/admin/admin/resetPwd/' + data.id,
                         type: 'put',
                         dataType: "json",
                         contentType: "application/json;charset=utf-8",

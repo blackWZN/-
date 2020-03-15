@@ -70,7 +70,7 @@ layui.use('jquery', function () {
     })
     //接口文档
     $('.layui-nav-tree li').eq(7).on('click', function () {
-        $('#content iframe').attr('src', '');
+        $('#content iframe').attr('src', 'http://localhost:8202/swagger-ui.html');
     })
 
 })

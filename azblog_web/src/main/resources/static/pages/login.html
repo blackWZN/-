@@ -70,7 +70,7 @@
             form.on('submit(formDemo)', function (data) {
                 layer.load(2);
                 $.ajax({
-                    url: 'http://localhost:8202/admin/login',
+                    url: 'http://localhost:8202/admin/admin/login',
                     type: 'post',
                     data: JSON.stringify(data.field),
                     dataType: "json",
@@ -83,7 +83,7 @@
                                 time: 1000 //1秒关闭（如果不配置，默认是3秒）
                             }, function () {
                                 storage.setItem('token', data.data);
-                                location.href = 'index.html';
+                                location.href = 'pages/index.html';
                             });
                         } else {
                             layer.msg(data.message, { icon: 2, time: 1000 });

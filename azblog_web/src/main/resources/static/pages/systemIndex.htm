@@ -40,21 +40,21 @@
         <div class="layui-card layui-col-md3">
             <div class="layui-card-header">在线用户</div>
             <div class="layui-card-body">
-                <h3>560</h3>
+                <h3>0</h3>
                 <h4>当前在线用户</h4>
             </div>
         </div>
         <div class="layui-card layui-col-md3 layui-col-md-offset1">
             <div class="layui-card-header">文章数量</div>
             <div class="layui-card-body">
-                <h3>560</h3>
-                <h4>文章数量/周</h4>
+                <h3>0</h3>
+                <h4>文章数量/天</h4>
             </div>
         </div>
         <div class="layui-card layui-col-md3 layui-col-md-offset1">
             <div class="layui-card-header">网站访客</div>
             <div class="layui-card-body">
-                <h3>560</h3>
+                <h3>0</h3>
                 <h4>网站访客/日</h4>
             </div>
         </div>
@@ -129,8 +129,9 @@
             ]
         };
 
+        //图标数据
         $.ajax({
-            url: 'http://127.0.0.1:8202/echarts/dataset',
+            url: 'http://127.0.0.1:8202/echarts/echarts/dataset',
             type: 'get',
             headers: {
                 Authorization: storage.getItem('token')
@@ -145,7 +146,40 @@
             }
         })
 
+        //文章数
+        $.ajax({
+            url: 'http://127.0.0.1:8202/article/article/todayCount',
+            type: 'get',
+            headers: {
+                Authorization: storage.getItem('token')
+            },
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.status == '200') {
+                    $('.layui-container h3').eq(1).text(data.data);
+                }
+            }
+        })
 
+        //在线人数
+        $.ajax({
+            url: 'http://127.0.0.1:8202/echarts/echarts/onlineCount',
+            type: 'get',
+            headers: {
+                Authorization: storage.getItem('token')
+            },
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data.status == '200') {
+                    console.log(data.data);
+                    $('.layui-container h3').eq(0).text(data.data);
+                }
+            }
+        })
+
+       
     </script>
 </body>
 

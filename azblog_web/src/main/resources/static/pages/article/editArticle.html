@@ -97,7 +97,7 @@
 
       //回显数据
       $.ajax({
-        url: 'http://localhost:8202/article/' + articleId,
+        url: 'http://localhost:8202/article/article/' + articleId,
         type: 'get',
         dataType: "json",
         contentType: "application/json;charset=utf-8",
@@ -109,26 +109,36 @@
           $('form input').eq(0).val(articleDta.title);
           $('form input').eq(1).val(articleDta.intro);
           //获取分类
-          $.get('http://localhost:8202/category/', {
-            page: 1,
-            limit: 10
-          }, function (res) {
-            var cate = $('#loadCate');
-            var data = res.data;
-            $.each(data, function (i, item) {
-              var option = $('<option />');
-              option.attr('value', item.id);
-              option.text(item.name);
-              option.appendTo(cate);
-              var categoryVal = $('form select').find('option');
-              //获取到分类并设置选中
-              $.each(categoryVal, function (i, item) {
-                if ($(item).val() == articleDta.category_id) {
-                  option.attr('selected', 'selected');
-                };
-              })
-              form.render("select");
-            })
+          $.ajax({
+            url: 'http://localhost:8202/category/category?page=1&&limit=10',
+            type: 'get',
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            headers: {
+              Authorization: storage.getItem('token')
+            },
+            success: function (res) {
+              if (res.status == '0') {
+                var cate = $('#loadCate');
+                var data = res.data;
+                $.each(data, function (i, item) {
+                  var option = $('<option />');
+                  option.attr('value', item.id);
+                  option.text(item.name);
+                  option.appendTo(cate);
+                  var categoryVal = $('form select').find('option');
+                  //获取到分类并设置选中
+                  $.each(categoryVal, function (i, item) {
+                    if ($(item).val() == articleDta.category_id) {
+                      option.attr('selected', 'selected');
+                    };
+                  })
+                  form.render("select");
+                })
+              } else {
+                layer.msg(res.message)
+              }
+            }
           })
           //是否推荐
           if (articleDta.recommended == 1) {
@@ -146,7 +156,7 @@
           }
           //回显内容
           layedit.setContent(index, articleDta.content, false);
-          
+
         },
       })
 
@@ -155,7 +165,7 @@
         getFormData();
         formData['id'] = articleId;
         $.ajax({
-          url: 'http://localhost:8202/article',
+          url: 'http://localhost:8202/article/article',
           type: 'put',
           dataType: "json",
           contentType: "application/json;charset=utf-8",
@@ -164,12 +174,13 @@
           },
           data: JSON.stringify(formData),
           success: function (res) {
-            layer.open({
-              title: '调试'
-              , content: res.message
-            });
-            storage.removeItem('articleId');
-            location.href = 'articleList.html';
+            if (res.status == 200) {
+              storage.removeItem('articleId');
+              location.href = 'articleList.html';
+            }else{
+              layer.msg(res.message);
+            }
+
           },
         })
 
