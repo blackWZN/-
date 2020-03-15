@@ -119,4 +119,9 @@ public class ArticleService {
         Optional<Article> article = articleDao.findById(id);
         return article.get();
     }
+
+    //统计今天的文章数量
+    public int todayCount(){
+        return articleDao.todayCount();
+    }
 }

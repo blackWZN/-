@@ -80,6 +80,11 @@ public class AdminService implements UserDetailsService {
 
     //根据id查找用户
     public Admin findById(String id) {
+        Admin admin = adminDao.findById(id).get();
+        adminDao.deleteRolesByAdminId(id);
+        if(admin.getUsername().equals("root")){
+            return null;
+        }
         return adminDao.findById(id).get();
     }
 

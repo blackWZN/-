@@ -12,6 +12,21 @@ spring:
   jpa:
     open-in-view: true
     show-sql: true
+  redis:
+    host: 192.168.25.136
+    port: 6379
+  zipkin:
+    #发送数据类型 kafaka、rabbitmq、web
+    sender:
+      type: rabbit
+    sleuth:
+      sampler:
+        probability: 1.0 #采样的比例
+  rabbitmq:
+    host: 192.168.25.136
+    port: 5672
+    username: guest
+    password: guest
 eureka:
   client:
     service-url:

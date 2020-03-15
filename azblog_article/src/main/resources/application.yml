@@ -19,10 +19,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   zipkin:
-    base-url: http://127.0.0.1:9411
+#    base-url: http://127.0.0.1:9411
     #发送数据类型 kafaka、rabbitmq、web
     sender:
-      type: web
+      type: rabbit
     sleuth:
       sampler:
         probability: 1.0 #采样的比例
@@ -55,13 +55,13 @@ eureka:
     lease-renewal-interval-in-seconds: 50 #每次发送心跳的时间
 rsakey:
   publicKeyName: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD4qpE7FRL2/7XDh2eGVoqdSIP0MYqZWETWWwW7+rfz7Ngzm+yNKeFiEK34pOvJEDgzcfqNOsL2pb1e0vyKsjFNz9SJU0xLMz8oz1sP+weCT4limJtH60xDPIg3tNdqLSaRhD1swjZEBnuIRanBYn9w0EojA8szCwW+AUgsjnS3twIDAQAB
-feign:
-  hystrix:
-    enabled: true
 
-# 在被监控的服务上添加暴露点
+# 在被监控的hystrix服务上添加暴露点
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+feign:
+  hystrix:
+    enabled: true

@@ -12,11 +12,18 @@ spring:
     port: 6379
   application:
     name: azblog-admin
-  #  rabbitmq:
-  #    host: 122.51.252.120
-  #    port: 5672
-  #    username: guest
-  #    password: guest
+  zipkin:
+    #发送数据类型 kafaka、rabbitmq、web
+    sender:
+      type: rabbit
+    sleuth:
+      sampler:
+        probability: 1.0 #采样的比例
+  rabbitmq:
+    host: 192.168.25.136
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     #消息总线
     bus:

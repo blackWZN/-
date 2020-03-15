@@ -19,6 +19,7 @@ public class SearchController {
     //文章搜索
     @GetMapping("/{keywords}/{page}/{limit}")
     public PageResult search(@PathVariable("keywords") String keywords, @PathVariable Integer page, @PathVariable Integer limit){
+
         Page<EsArticle> pageInfo = articleService.searchArticle(keywords, page, limit);
         return new PageResult("0","搜索成功",pageInfo.getTotalElements(),
                 pageInfo.getTotalPages(),pageInfo.getContent());

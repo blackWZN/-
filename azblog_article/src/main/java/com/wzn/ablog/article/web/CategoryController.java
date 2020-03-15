@@ -2,10 +2,14 @@ package com.wzn.ablog.article.web;
 
 import com.wzn.ablog.article.feign.SearchFeign;
 import com.wzn.ablog.article.service.CategoryService;
+import com.wzn.ablog.common.annotation.Authorized;
 import com.wzn.ablog.common.entity.Category;
 import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.ablog.common.vo.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
+@Api(tags = {"分类"})
 public class CategoryController {
 
     @Autowired
@@ -22,7 +27,8 @@ public class CategoryController {
     @Autowired
     private SearchFeign searchFeign;
 
-    //查找全部
+    @ApiOperation(value = "分类列表", notes = "获取分类列表并分页")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     @GetMapping
     public PageResult list(Integer page, Integer limit){
         Page<Category> pageInfo = categoryService.list(page, limit);
@@ -30,12 +36,16 @@ public class CategoryController {
         ,pageInfo.getTotalPages(),pageInfo.getContent());
     }
 
+    @ApiOperation(value = "全部分类")
+    @ApiImplicitParam(name = "Authorization", value = "令牌", required = true)
     @GetMapping("/all")
     public List<Category> all(){
       return categoryService.list();
     }
 
-    //根据id查找
+
+    @ApiOperation(value = "根据id查找分类")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     @GetMapping("/{id}")
     public Result findNameById(@PathVariable String id){
         String name = categoryService.findNameById(id);
@@ -45,24 +55,33 @@ public class CategoryController {
         return new Result("200","未查找到分类名称");
     }
 
+    @ApiOperation(value = "根据id删除分类",notes = "token需要有root权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
+    @Authorized
     @DeleteMapping("/{ids}")
     public AzResult del(@PathVariable String[] ids){
         categoryService.del(ids);
         return AzResult.ok("删除成功");
     }
 
+    @ApiOperation(value = "添加分类")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     @PostMapping
     public AzResult add(@RequestBody Category category){
         categoryService.add(category);
         return AzResult.ok("添加成功");
     }
 
+    @ApiOperation(value = "修改分类")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     @PutMapping
     public AzResult update(@RequestBody Category category){
         categoryService.update(category);
         return AzResult.ok("更新成功");
     }
 
+    @ApiOperation(value = "搜索分类")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     @GetMapping("/search")
     public PageResult search(String keywords,int page,int limit){
         return searchFeign.searchCategroy(keywords, page, limit);

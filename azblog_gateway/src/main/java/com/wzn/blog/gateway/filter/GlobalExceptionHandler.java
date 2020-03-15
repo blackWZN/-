@@ -30,7 +30,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         } else if(throwable instanceof ExpiredJwtException){
             result.setStatus("500").setMessage("身份过期请重新登录");
         }else{
-            result.setStatus("500").setMessage("服务异常");
+            result.setStatus("500").setMessage(throwable.getMessage());
         }
 
         DataBufferFactory bufferFactory = serverWebExchange.getResponse().bufferFactory();

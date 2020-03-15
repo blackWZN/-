@@ -1,11 +1,13 @@
 package com.wzn.ablog.article.feign;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.wzn.ablog.common.vo.PageResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 
 @FeignClient(value = "azblog-search",fallback = SearchFeignFallback.class)
 public interface SearchFeign {

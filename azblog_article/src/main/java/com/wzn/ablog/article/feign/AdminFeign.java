@@ -4,6 +4,7 @@ import com.wzn.ablog.common.vo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+
 @FeignClient(value = "azblog-admin",fallback = AdminFeignFallback.class)
 public interface AdminFeign {
 

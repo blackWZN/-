@@ -21,6 +21,13 @@ spring:
     host: 192.168.25.136
     username: guest
     password: guest
+  zipkin:
+    #发送数据类型 kafaka、rabbitmq、web
+    sender:
+      type: rabbit
+    sleuth:
+      sampler:
+        probability: 1.0 #采样的比例
   cloud:
     stream:
       binders:
@@ -29,5 +36,12 @@ spring:
       bindings:
         input:
           destination: article
-
-
+feign:
+  hystrix:
+    enabled: true
+# 在被监控的服务上添加暴露点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  #代表开放所有端点

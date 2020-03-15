@@ -8,11 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class blogUtils {
+public class BlogUtils {
 
     public static void respMsg(HttpServletResponse response, String status, String msg, Object data) {
         try {
@@ -72,5 +73,47 @@ public class blogUtils {
 
         }
         return returnList;
+    }
+
+    public static String getWeek(DayOfWeek dayOfWeek) {
+        String week = dayOfWeek.toString().toLowerCase();
+        if (week.equals("monday")) {
+            return "周一";
+        } else if (week.equals("tuesday")) {
+            return "周二";
+        } else if (week.equals("tuesday")) {
+            return "周三";
+        } else if (week.equals("thursday")) {
+            return "周四";
+        } else if (week.equals("friday")) {
+            return "周五";
+        } else if (week.equals("saturday")) {
+            return "周六";
+        } else if (week.equals("weekday")) {
+            return "周日";
+        } else {
+            return null;
+        }
+
+    }
+
+    public static String getWeekNum(String weekDay) {
+        if (weekDay.equals("周一")) {
+            return "1";
+        } else if (weekDay.equals("周二")) {
+            return "2";
+        } else if (weekDay.equals("周三")) {
+            return "3";
+        } else if (weekDay.equals("周四")) {
+            return "4";
+        } else if (weekDay.equals("周五")) {
+            return "5";
+        } else if (weekDay.equals("周六")) {
+            return "6";
+        } else if (weekDay.equals("周日")) {
+            return "7";
+        } else {
+            return null;
+        }
     }
 }

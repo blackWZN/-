@@ -34,30 +34,52 @@ spring:
                 key-resolver: '#{@urlKeyResolver}'
                 redis-rate-limiter.replenishRate: 15 #令牌桶总容量
                 redis-rate-limiter.burstCapacity: 3 #令牌桶每秒填充平均速率
+            - SwaggerHeaderFilter
+            - StripPrefix=1
         - id: azblog-article
           uri: lb://azblog-article
           predicates:
             - Path=/article/**,/category/**
+          filters:
+            - SwaggerHeaderFilter
+            - StripPrefix=1
         - id: azblog-search
           uri: lb://azblog-search
           predicates:
             - Path=/search/**
+          filters:
+            - SwaggerHeaderFilter
+            - StripPrefix=1
         - id: azblog-Statistics
           uri: lb://azblog-Statistics
           predicates:
             - Path=/echarts/**
+          filters:
+            - SwaggerHeaderFilter
+            - StripPrefix=1
+        - id: azblog-base
+          uri: lb://azblog-base
+          predicates:
+            - Path=/link/**,/webInfo/**
+          filters:
+            - SwaggerHeaderFilter
+            - StripPrefix=1
   redis:
     host: 192.168.25.136
     port: 6379
   zipkin:
-    base-url: http://127.0.0.1:9411
+#    base-url: http://127.0.0.1:9411
     #发送数据类型 kafaka、rabbitmq、web
     sender:
-      type: web
+      type: rabbit
   sleuth:
     sampler:
       probability: 1.0 #采样的比例
   main:
     allow-bean-definition-overriding: true
+  rabbitmq:
+    host: 192.168.25.136
+    username: guest
+    password: guest
 rsakey:
   publicKeyName: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD4qpE7FRL2/7XDh2eGVoqdSIP0MYqZWETWWwW7+rfz7Ngzm+yNKeFiEK34pOvJEDgzcfqNOsL2pb1e0vyKsjFNz9SJU0xLMz8oz1sP+weCT4limJtH60xDPIg3tNdqLSaRhD1swjZEBnuIRanBYn9w0EojA8szCwW+AUgsjnS3twIDAQAB

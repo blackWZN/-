@@ -42,7 +42,15 @@ public class JwtVerifyFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         String path = request.getURI().getPath();
         //登录请求放行
-        if (path.contains("/admin/login") || path.contains("/admin/apply") ){
+        if (path.contains("/admin/login")
+                || path.contains("/admin/apply")
+                || path.contains("/article/v2/api-docs")
+                || path.contains("/admin/v2/api-docs")
+                || path.contains("/base/v2/api-docs")
+                || path.contains("/admin/v2/api-docs")
+                || path.contains("/echarts/v2/api-docs")
+                || path.contains("/search/v2/api-docs")
+                || path.contains("/link/v2/api-docs")) {
             return chain.filter(exchange);
         }
 
@@ -63,6 +71,7 @@ public class JwtVerifyFilter implements GlobalFilter, Ordered {
 
     /**
      * 执行顺序，值小优先
+     *
      * @return
      */
     public int getOrder() {

@@ -6,10 +6,11 @@ import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.utils.JwtUtils;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.utils.TokenUtils;
-import com.wzn.ablog.common.utils.blogUtils;
+import com.wzn.ablog.common.utils.BlogUtils;
 import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.ablog.common.vo.Result;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/admin")
+@Api(tags = {"用户模块"})
 public class AdminController {
 
     @Autowired
@@ -40,7 +42,7 @@ public class AdminController {
     //邮件验证码
     @GetMapping("/code")
     public AzResult code(String phone) {
-        String code = blogUtils.code(request);
+        String code = BlogUtils.code(request);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("AZ博客");
         message.setText("注册验证码为：" + code);
@@ -53,7 +55,7 @@ public class AdminController {
     //注册
     @PostMapping("/apply")
     public AzResult apply(@RequestBody Map<String, String> params) {
-        String code = blogUtils.getCode(request);
+        String code = BlogUtils.getCode(request);
         for (Map.Entry<String, String> map : params.entrySet()){
             if(map.getKey().equals("code")){
                if(map.getValue().equals(code)){
@@ -99,6 +101,9 @@ public class AdminController {
     @GetMapping("{id}")
     public Result findById(@PathVariable String id) {
         Admin admin = adminService.findById(id);
+        if(admin == null){
+            return new Result("500","root用户不可编辑");
+        }
         return new Result("200", "查询成功", admin);
     }
 

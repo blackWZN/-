@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Bean;
 @EnableEurekaClient
 @EnableConfigurationProperties(RsaKeyConfig.class)
 @EnableFeignClients(basePackages = {"com.wzn.ablog.article.feign"})
-@EnableCircuitBreaker
-@EnableHystrixDashboard
+@EnableCircuitBreaker//hystrix
+@EnableHystrixDashboard//hystrix页面监控平台
 @EntityScan("com.wzn.ablog.common.entity")
 public class ArticleApplication {
     public static void main(String[] args) {

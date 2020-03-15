@@ -1,9 +1,7 @@
 package com.wzn.azblog.Statistics.service;
 
-import com.netflix.discovery.converters.Auto;
 import com.wzn.ablog.common.entity.EchartsDimensions;
-import com.wzn.ablog.common.entity.EchartsSource;
-import com.wzn.ablog.common.utils.blogUtils;
+import com.wzn.ablog.common.utils.BlogUtils;
 import com.wzn.ablog.common.vo.EchartsData;
 import com.wzn.ablog.common.vo.EchartsResult;
 import com.wzn.azblog.Statistics.dao.EchartsDimensionsDao;
@@ -36,7 +34,7 @@ public class EchartsService {
         });
         //查询出图表的source数据
         List<Object[]> data = echartsSourceDao.findData();
-        List<EchartsData> echartsData = blogUtils.castEntity(data, EchartsData.class);
+        List<EchartsData> echartsData = BlogUtils.castEntity(data, EchartsData.class);
         Map<String,String> monday = new LinkedHashMap<>();
         Map<String,String> Tuesday = new LinkedHashMap<>();
         Map<String,String> Wednesday = new LinkedHashMap<>();

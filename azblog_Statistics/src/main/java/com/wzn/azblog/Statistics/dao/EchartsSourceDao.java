@@ -21,6 +21,8 @@ public interface EchartsSourceDao extends JpaRepository<EchartsSource,String>,
             "  echarts_flag f,\n" +
             "  echarts_source s \n" +
             "WHERE s.flag = f.id \n" +
-            "  AND s.xaxis = x.id ",nativeQuery = true)
+            "  AND s.xaxis = x.id \n",nativeQuery = true)
     List<Object[]> findData();
+
+
 }
