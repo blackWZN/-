@@ -11,6 +11,8 @@ import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.ablog.common.vo.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/admin")
-@Api(tags = {"用户模块"})
+@Api(tags = {"用户"})
 public class AdminController {
 
     @Autowired
@@ -39,7 +41,7 @@ public class AdminController {
     @Autowired
     private MailSender mailSender;
 
-    //邮件验证码
+    @ApiOperation(value = "获取验证码")
     @GetMapping("/code")
     public AzResult code(String phone) {
         String code = BlogUtils.code(request);
@@ -52,7 +54,7 @@ public class AdminController {
         return AzResult.ok().data("验证码已发送到您的邮箱");
     }
 
-    //注册
+    @ApiOperation(value = "注册")
     @PostMapping("/apply")
     public AzResult apply(@RequestBody Map<String, String> params) {
         String code = BlogUtils.getCode(request);
@@ -67,18 +69,20 @@ public class AdminController {
         return AzResult.err("验证码错误");
     }
 
-    //加载用户列表
     @Authorized
     @GetMapping
+    @ApiOperation(value = "用户列表",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public PageResult getAdminList(int page, int limit) {
         Page<Admin> list = adminService.getAdminList(page, limit);
         return new PageResult("0", "成功", list.getTotalElements(),
                 list.getTotalPages(), list.getContent());
     }
 
-    //添加用户
     @Authorized
     @PostMapping
+    @ApiOperation(value = "添加用户",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result add(@RequestBody Admin admin) {
         boolean isRepetitive = adminService.adminIsRepetitive(admin.getUsername());
         if (!isRepetitive) {
@@ -88,17 +92,27 @@ public class AdminController {
         return new Result("500", "用户名重复");
     }
 
-    //重置密码
+    @Authorized
+    @PutMapping
+    @ApiOperation(value = "修改用户",notes = "token需要包含ROOT和ADMIN权限")
+    public AzResult update(@RequestBody Map params){
+        adminService.update(params);
+        return AzResult.ok();
+    }
+
     @Authorized
     @PutMapping("/resetPwd/{id}")
+    @ApiOperation(value = "重置密码",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result resetPwd(@PathVariable String id) {
         adminService.resetPwd(id);
         return new Result("200", "密码重置成功");
     }
 
-    //根据id查找用户
     @Authorized
     @GetMapping("{id}")
+    @ApiOperation(value = "根据id查找用户",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result findById(@PathVariable String id) {
         Admin admin = adminService.findById(id);
         if(admin == null){
@@ -107,9 +121,10 @@ public class AdminController {
         return new Result("200", "查询成功", admin);
     }
 
-    //获取用户名
     @Authorized
     @PostMapping("/getUserame/{id}")
+    @ApiOperation(value = "获取用户名",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result getUsernameById(@PathVariable String id) {
         log.debug(TokenUtils.getUserId(request, rsaKeyConfig));
         String username = adminService.getUsernameById(TokenUtils.getUserId(request, rsaKeyConfig));
@@ -119,23 +134,26 @@ public class AdminController {
         return new Result("500", "请登录后操作");
     }
 
-    //根据token获取用户名
     @GetMapping("/getUsername")
+    @ApiOperation(value = "获取token中的用户名")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result getUsernameByToken() {
         return new Result("200", "获取到用户名", TokenUtils.getUsername(request, rsaKeyConfig));
     }
 
-    //刷新token
     @GetMapping("/refreshToken")
+    @ApiOperation(value = "刷新token")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result refreshToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         JwtUtils.parserToken(token, rsaKeyConfig.getPublicKey());
         return new Result("200", "token未过期");
     }
 
-    //根据id删除
     @Authorized
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "根据id删除",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result delete(@PathVariable String id) {
         boolean b = adminService.delete(id);
         if (b) {
@@ -144,10 +162,13 @@ public class AdminController {
         return new Result("500", "root用户不可删除");
     }
 
-    //根据用户名搜索
-    @GetMapping("search/{username}")
-    public AzResult searchByUsername(@PathVariable String username){
-        List<Admin> admins = adminService.searchByUsername(username);
-        return AzResult.ok().data(admins);
+    @Authorized
+    @GetMapping("search/{keyword}")
+    @ApiOperation(value = "根据用户名搜索",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true)
+    public PageResult searchByUsername(@PathVariable String keyword,int page,int limit){
+        Page<Admin> admins = adminService.searchByUsername(keyword, page, limit);
+        return new PageResult("0","搜索成功",
+                admins.getTotalElements(),admins.getTotalPages(),admins.getContent());
     }
 }

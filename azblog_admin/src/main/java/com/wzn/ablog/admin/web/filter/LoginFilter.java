@@ -52,6 +52,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         } catch (Exception e) {
             this.logger.debug("用户名或密码错误");
             BlogUtils.respMsg(response, "500", "用户名或密码错误", null);
+            e.printStackTrace();
+
             return null;
         }
     }

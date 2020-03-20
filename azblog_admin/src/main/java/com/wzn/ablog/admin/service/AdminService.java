@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,9 @@ public class AdminService implements UserDetailsService {
     @Autowired
     private IdWorker idWorker;
 
+    public static final String ROLE_ROOT = "ROOT";
+
+    public static final String ROLE_ADMIN = "ADMIN";
     //登录
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Admin admin = adminDao.findAdminByUsername(s);
@@ -46,10 +51,10 @@ public class AdminService implements UserDetailsService {
     }
 
     //申请账号
-    public void apply(Map<String,String> params) {
+    public void apply(Map<String, String> params) {
         Admin admin = new Admin();
         String id = idWorker.nextId() + "";
-        Stream.of(params).forEach(map->{
+        Stream.of(params).forEach(map -> {
             admin.setId(id);
             admin.setUsername(map.get("username"));
             admin.setPassword(encoder.encode(map.get("password")));
@@ -58,7 +63,7 @@ public class AdminService implements UserDetailsService {
             admin.setStatus("1");
         });
         adminDao.save(admin);
-        adminDao.setRoles(idWorker.nextId()+"",id,"2");
+        adminDao.setRoles(idWorker.nextId() + "", id, "2");
     }
 
     //根据id查找用户名
@@ -81,8 +86,7 @@ public class AdminService implements UserDetailsService {
     //根据id查找用户
     public Admin findById(String id) {
         Admin admin = adminDao.findById(id).get();
-        adminDao.deleteRolesByAdminId(id);
-        if(admin.getUsername().equals("root")){
+        if (admin.getUsername().equals("root")) {
             return null;
         }
         return adminDao.findById(id).get();
@@ -92,7 +96,7 @@ public class AdminService implements UserDetailsService {
     public void add(Admin admin) {
         admin.setId(String.valueOf(idWorker.nextId()));
         admin.setStatus(admin.getStatus() != null ?
-                admin.getStatus().equals("on") ? "0" : "1":"1");
+                admin.getStatus().equals("on") ? "0" : "1" : "1");
         admin.setPassword(encoder.encode(admin.getPassword()));
         Admin save = adminDao.save(admin);
         String[] reqRoles = admin.getResRoles();
@@ -103,28 +107,89 @@ public class AdminService implements UserDetailsService {
     }
 
     //用户名是否重复
-    public boolean adminIsRepetitive(String username){
+    public boolean adminIsRepetitive(String username) {
         String name = adminDao.findUsername(username);
-        if(name != null){
+        if (name != null) {
             return true;
         }
         return false;
     }
 
     //根据id删除
-    public boolean delete(String id){
+    public boolean delete(String id) {
         Admin admin = adminDao.findById(id).get();
-        adminDao.deleteRolesByAdminId(id);
-        if(admin.getUsername().equals("root")){
+        if (admin.getUsername().equals("root")) {
             return false;
+        } else {
+            adminDao.deleteRolesByAdminId(id);
+            adminDao.deleteById(id);
+            return true;
         }
-        adminDao.deleteById(id);
-        return true;
     }
 
     //根据用户名搜索
-    public List<Admin> searchByUsername(String username){
-        List<Admin> admins = adminDao.findByUsernameLike(username);
+    public Page<Admin> searchByUsername(String keyword, int page, int limit) {
+        Specification<Admin> specification = new Specification<Admin>() {
+            @Override
+            public Predicate toPredicate(Root<Admin> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                //要模糊查询的字段
+                Path username = root.get("username");
+                //criteriaBuilder.like模糊查询，第一个参数是上一行的返回值，第二个参数是like('%xxx%')中，xxx的值
+                Predicate predicate = criteriaBuilder.like(username, "%" + keyword + "%");
+                return predicate;
+            }
+        };
+        Page<Admin> admins = adminDao.findAll(specification, PageRequest.of(page - 1, limit));
         return admins;
+    }
+
+    //修改用户信息
+    public void update(Map params) {
+        String status = (String) params.get("status");
+        if (status == null) {
+            status = "0";
+        }
+        //修改用户信息
+        adminDao.update((String) params.get("username"), (String) params.get("sex"), (String) params.get("mail"),
+                status.equals("on") ? "1" : "0", (String) params.get("id"));
+
+        //修改权限
+        //选择ADMIN
+        if (params.get(this.ROLE_ADMIN) != null && params.get(this.ROLE_ADMIN).equals("on")) {
+            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ADMIN);
+            //表里没有ADMIN权限，就增加ADMIN权限
+            int count = adminDao.hasRole((String) params.get("id"), roleId);
+            if (count == 0) {
+                adminDao.setRoles(idWorker.nextId() + "", (String) params.get("id"), roleId);
+            }
+        }
+        //选择ROOT
+        if (params.get(this.ROLE_ROOT) != null && params.get(this.ROLE_ROOT).equals("on")) {
+            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ROOT);
+            //表里没有ROOT权限，就增加ROOT权限
+            int count = adminDao.hasRole((String) params.get("id"), roleId);
+            if (count == 0) {
+                adminDao.setRoles(idWorker.nextId() + "", (String) params.get("id"), roleId);
+            }
+        }
+
+        //没有选择ADMIN
+        if (params.get(this.ROLE_ADMIN) == null) {
+            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ADMIN);
+            int count = adminDao.hasRole((String) params.get("id"), roleId);
+            if (count >= 1) {//有该权限就删除
+                adminDao.delRole((String) params.get("id"),roleId);
+            }
+        }
+
+        //没有选择ROOT
+        if (params.get(this.ROLE_ROOT) == null) {
+            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ROOT);
+            int count = adminDao.hasRole((String) params.get("id"), roleId);
+            if (count >= 1) {//有该权限就删除
+                adminDao.delRole((String) params.get("id"),roleId);
+            }
+        }
+
     }
 }

@@ -5,6 +5,9 @@ import com.wzn.ablog.admin.dao.RoleDao;
 import com.wzn.ablog.common.entity.Port;
 import com.wzn.ablog.common.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +30,9 @@ public class RoleService {
     }
 
     //查找全部权限
-    public List<Role> roleList(){
-        List<Role> list = roleDao.findAll();
-        return list;
+    public Page<Role> roleList(int page, int limit){
+        Page<Role> rolePage = roleDao.findAll(PageRequest.of(page - 1, limit));
+        return rolePage;
     }
 
     //根据id查找权限
