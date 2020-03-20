@@ -88,7 +88,7 @@ public class Admin implements UserDetails{
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return status.equals("1") ? false : true;
+        return status.equals("0") ? false : true;
     }
 
     //密码未过期
