@@ -14,6 +14,7 @@
         <module name="azblog_eureka" />
         <module name="azblog_gateway" />
         <module name="azblog_search" />
+        <module name="azblog_Statistics" />
         <module name="azblog_turbine" />
         <module name="azblog_web" />
       </profile>
@@ -28,12 +29,14 @@
       <module name="azblog_eureka" target="1.8" />
       <module name="azblog_gateway" target="1.8" />
       <module name="azblog_search" target="1.8" />
+      <module name="azblog_Statistics" target="1.8" />
       <module name="azblog_turbine" target="1.8" />
       <module name="azblog_web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="azblog_Statistics" options="-parameters" />
       <module name="azblog_admin" options="-parameters" />
       <module name="azblog_article" options="-parameters" />
       <module name="azblog_base" options="-parameters" />

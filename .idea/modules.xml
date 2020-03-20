@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/azblog.iml" filepath="$PROJECT_DIR$/.idea/azblog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/azblog_Statistics/azblog_Statistics.iml" filepath="$PROJECT_DIR$/azblog_Statistics/azblog_Statistics.iml" />
       <module fileurl="file://$PROJECT_DIR$/azblog_admin/azblog_admin.iml" filepath="$PROJECT_DIR$/azblog_admin/azblog_admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/azblog_article/azblog_article.iml" filepath="$PROJECT_DIR$/azblog_article/azblog_article.iml" />
       <module fileurl="file://$PROJECT_DIR$/azblog_base/azblog_base.iml" filepath="$PROJECT_DIR$/azblog_base/azblog_base.iml" />
