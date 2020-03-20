@@ -148,6 +148,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                     layer.setTop(layero);
                     storage.setItem('articleId', data.id);
                 }
+             
             });
         }
     });
@@ -160,7 +161,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
         });
     })
 
-    //重置
+    //搜索重置
     $('.reset').click(function () {
         $('#searchVal').val('');
         table.reload('list', {

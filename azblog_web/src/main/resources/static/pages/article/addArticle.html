@@ -66,7 +66,7 @@
       </div>
       <div class="layui-form-item">
         <div class="layui-input-block">
-          <button class="layui-btn" type="button" id="subBtn" lay-filter="formDemo">提交</button>
+          <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
           <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
       </div>
@@ -122,7 +122,7 @@
       })
 
       //点击提交
-      $('#subBtn').click(function () {
+      form.on('submit(formDemo)', function (data) {
         getFormData();
         $.ajax({
           url: 'http://localhost:8202/article/article',
@@ -135,18 +135,17 @@
           data: JSON.stringify(formData),
           success: function (res) {
             if (res.status == '200') {
-              layer.msg(res.data);
-              // setTimeout(function(){
-              //   window.parent.location.reload();
-              // },3000)
+              layer.msg(res.message);
+              setTimeout(function () {
+                window.parent.location.reload();
+              }, 800)
             } else {
               layer.msg(res.message)
             }
-          },
+          }
         })
-
-
-      })
+        return false;
+      });
     });
   </script>
 

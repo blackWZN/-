@@ -8,10 +8,15 @@
     <link rel="stylesheet" href="../layui\css\layui.css">
     <script src="../layui\layui.all.js"></script>
     <title>Document</title>
+    <style>
+        .layui-container {
+            margin-top: 60px;
+        }
+    </style>
 </head>
 
-<body> 
-    <form  class="layui-form layui-container" action="">
+<body>
+    <form class="layui-form layui-container">
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">编辑信息</label>
             <div class="layui-input-block">
@@ -27,15 +32,47 @@
     </form>
 
     <script>
-        //Demo
         layui.use(['form', 'layedit', 'layer', 'laydate', 'jquery'], function () {
             var form = layui.form;
             var layedit = layui.layedit;
-            var index = layedit.build('descEndit'); //建立编辑器
+            var layer = layui.layer;
+            var $ = layui.jquery;
+            var storage = window.localStorage;
+            var index = layedit.build('descEndit');
 
-            //监听提交
+            //显示信息
+            $.ajax({
+                url: 'http://localhost:8202/webInfo/webInfo',
+                type: 'get',
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                headers: {
+                    Authorization: storage.getItem('token')
+                },
+                success: function (res) {
+                    if (res.status == '200') {
+                        layedit.setContent(index, res.data[0].summary);
+                    } else {
+                        layer.msg(res.message)
+                    }
+                }
+            })
+
+            //提交修改
             form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
+                var content = layedit.getContent(index);
+                $.ajax({
+                    url: 'http://localhost:8202/webInfo/webInfo/'+content,
+                    type: 'put',
+                    dataType: "json",
+                    contentType: "application/json;charset=utf-8",
+                    headers: {
+                        Authorization: storage.getItem('token')
+                    },
+                    success: function (res) {
+                        layer.msg(res.message);
+                    }
+                })
                 return false;
             });
         });

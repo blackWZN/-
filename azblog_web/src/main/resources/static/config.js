@@ -46,7 +46,7 @@ layui.use('jquery', function () {
     $('.layui-nav-tree li').eq(2).find('dl dd').eq(0).on('click', function () {
         $('#content iframe').attr('src', 'system/admin.html');
     })
-    $('.layui-nav-tree li').eq(3).find('dl dd').eq(1).on('click', function () {
+    $('.layui-nav-tree li').eq(2).find('dl dd').eq(1).on('click', function () {
         $('#content iframe').attr('src', 'system/roles.html');
     })
     $('.layui-nav-tree li').eq(2).find('dl dd').eq(2).on('click', function () {

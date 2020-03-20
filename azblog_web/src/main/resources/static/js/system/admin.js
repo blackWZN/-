@@ -3,6 +3,8 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
     var storage = window.localStorage;
     var $ = layui.jquery;
     var layer = layui.layer;
+    var form = layui.form;
+
     table.render({
         elem: '#list'
         , url: 'http://localhost:8202/admin/admin/'
@@ -13,6 +15,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
         }
         , cols: [[
             { type: 'checkbox', fixed: 'left' }
+            , { field: 'id', title: 'ID', width: 60 }
             , { field: 'username', title: '账号', width: 180, fedit: 'text', unresize: true, sort: true }
             , { field: 'sex', title: '性别', width: 60 }
             , { field: 'email', title: '邮箱', width: 180 }
@@ -28,7 +31,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
             , { field: 'createTime', title: '创建时间', width: 150 }
             , {
                 field: 'status', title: '状态', width: 100, templet: function (res) {
-                    return res.status == "1" ? "锁定" : "正常"
+                    return res.status == "0" ? "锁定" : "正常"
                 }
             }
             , { fixed: 'right', title: '操作', toolbar: '#barDemo' }
@@ -77,7 +80,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                 yes: function (index, layero) {
                     layer.close(index);
                     $.ajax({
-                        url: 'http://localhost:8202/admin/admin/'+data.id,
+                        url: 'http://localhost:8202/admin/admin/' + data.id,
                         type: 'delete',
                         dataType: "json",
                         contentType: "application/json;charset=utf-8",
@@ -88,7 +91,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                             if (data.status == '200') {
                                 layer.msg(data.message);
                                 table.reload('list', {});
-                            }else{
+                            } else {
                                 layer.msg(data.message);
                             }
                         }
@@ -97,19 +100,36 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
             });
 
         } else if (obj.event === 'edit') {//编辑用户
-            layer.open({
-                title: '编辑用户',
-                type: 2,
-                shade: false,
-                area: ['430px', '420px'],
-                offset: ['25px', '25%'],
-                content: 'editAdmin.html',
-                shade: [0.3, '#393D49'], //遮罩层
-                zIndex: layer.zIndex,
-                success: function (layero) {
-                    layer.setTop(layero); //设置窗口为最顶层
-                }
+            $.ajax({
+                url: 'http://localhost:8202/admin/admin/' + data.id,
+                type: 'get',
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                headers: {
+                    Authorization: storage.getItem('token')
+                },
+                success: function (res) {
+                    if (res.status == '500') {
+                        layer.msg(res.message);
+                    } else {
+                        layer.open({
+                            title: '编辑用户',
+                            type: 2,
+                            shade: false,
+                            area: ['430px', '420px'],
+                            offset: ['25px', '25%'],
+                            content: 'editAdmin.html',
+                            shade: [0.3, '#393D49'], //遮罩层
+                            zIndex: layer.zIndex,
+                            success: function (layero) {
+                                layer.setTop(layero); //设置窗口为最顶层
+                                storage.setItem('adminId', data.id);
+                            }
+                        });
+                    }
+                },
             });
+
         } else if (obj.event === 'resetPwd') {//重置密码
             layer.open({
                 content: '确定要重置密码吗，初始密码为123456',
@@ -134,4 +154,14 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
             });
         }
     });
+
+    //搜索
+    form.on('submit(formDemo)', function (data) {
+        var keyword = $('.searchContent').val();
+        console.log(keyword);
+        table.reload('list', {
+            url: 'http://localhost:8202/admin/admin/search/' + keyword
+        });
+        return false;
+    })
 });

@@ -35,7 +35,7 @@
 
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
-    <button class="layui-btn layui-btn-sm" lay-event="delmore">删除</button>
+    <button class="layui-btn layui-btn-sm" lay-event="delMore">删除</button>
   </div>
   </script>
     <script type="text/html" id="bar">
@@ -53,7 +53,7 @@
 
         table.render({
           elem: '#test'
-          , url: '/'
+          , url: 'http://localhost:8202/role/role/roleList'
           , toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
           , title: '用户数据表'
           , headers: {
@@ -61,10 +61,10 @@
           }
           , cols: [[
             { type: 'checkbox', fixed: 'left' }
-            , { field: 'id', title: 'id', width: 120, fedit: 'text', unresize: true, sort: true }
-            , { field: 'name', title: '角色名', width: 120, edit: 'text' }
-            , { fixed: 'right', title: '备注' }
-            , { fixed: 'right', title: '操作', toolbar: '#bar' }
+            , { field: 'role_id', title: 'id', width: 120, fedit: 'text', unresize: true, sort: true }
+            , { field: 'role_name', title: '角色名', width: 120, edit: 'text' }
+            , { field: 'comments', title: '备注' }
+            , { field: 'right', title: '操作', toolbar: '#bar' }
           ]]
           , page: {
             layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -82,13 +82,12 @@
         table.on('toolbar(test)', function (obj) {
           var checkStatus = table.checkStatus(obj.config.id);
           switch (obj.event) {
-            case 'getCheckData':
+            case 'add'://添加
               var data = checkStatus.data;
               layer.alert(JSON.stringify(data));
               break;
-            //自定义头工具栏右侧图标 - 提示
-            case 'LAYTABLE_TIPS':
-              layer.alert('这是工具栏右侧自定义的一个图标按钮');
+            case 'delMore'://批量删除
+             
               break;
           };
         });
@@ -97,12 +96,13 @@
         table.on('tool(test)', function (obj) {
           var data = obj.data;
           //console.log(obj)
-          if (obj.event === 'del') {
+          if (obj.event === 'del') {//单个删除
             layer.confirm('真的删除行么', function (index) {
               obj.del();
               layer.close(index);
             });
-          } else if (obj.event === 'edit') {
+          } else if (obj.event === 'edit') 
+          {//编辑
             layer.prompt({
               formType: 2
               , value: data.email

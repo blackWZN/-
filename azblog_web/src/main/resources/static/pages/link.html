@@ -14,27 +14,26 @@
 
 <body>
   <!-- 搜索 -->
-  <form class="layui-form" action="">
-    <div id="search" class="layui-form-item">
-      <div class="layui-input-block">
-        <input type="text" name="title" required lay-verify="required" placeholder="请输入搜索内容" autocomplete="off"
-          class="layui-input">
-      </div>
-      
-      <div id="searchBtn" class="layui-input-block">
-        <button class="layui-btn" lay-submit lay-filter="formDemo">搜索</button>
-        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-      </div>
+  <div id="search" class="layui-form-item">
+    <div class="layui-input-block">
+      <input type="text" name="title" required lay-verify="required" placeholder="请输入搜索内容" autocomplete="off"
+        class="layui-input searchContent">
     </div>
-  </form>
+
+    <div id="searchBtn" class="layui-input-block">
+      <button class="layui-btn searchLink" lay-filter="formDemo">搜索</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+
   <!-- 表单数据 -->
   <table class="layui-hide" id="test" lay-filter="test">
 
     <script type="text/html" id="toolbarDemo">
 
   <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">添加</button>
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">删除</button>
+    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    <button class="layui-btn layui-btn-sm" lay-event="delMore">删除</button>
   </div>
   </script>
     <script type="text/html" id="barDemo">
@@ -44,76 +43,146 @@
 
 
     <script>
-      layui.use('table', function () {
+      layui.use(['table', 'jquery', 'layer'], function () {
         var table = layui.table;
+        var storage = window.localStorage;
+        var $ = layui.jquery;
+        var layer = layui.layer;
 
         table.render({
           elem: '#test'
-          , url: '/test/table/demo1.json'
+          , url: 'http://localhost:8202/link/link'
           , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
           , title: '用户数据表'
+          , headers: {
+            Authorization: storage.getItem('token')
+          }
           , cols: [[
             { type: 'checkbox', fixed: 'left' }
             , { field: 'id', title: 'ID', width: 100, fedit: 'text', unresize: true, sort: true }
-            , { field: 'username', title: '标题', width: 120, edit: 'text' }
+            , { field: 'title', title: '标题', width: 120 }
+            , { field: 'summary', title: '介绍', width: 120 }
+            , { field: 'url', title: '地址', width: 120 }
+            , { field: 'clickCount', title: '点击数', width: 110 }
             , {
-              field: 'email', title: '介绍', width: 120, edit: 'text', templet: function (res) {
-                return '<em>' + res.email + '</em>'
+              field: 'status', title: '状态', width: 80, templet: function (res) {
+                return res.status == "1" ? "开启" : "关闭"
               }
             }
-            , { field: 'sex', title: '地址', width: 120 }
-            , { field: 'sign', title: '点击数', width: 110}
-            , { field: 'experience', title: '状态', width: 80 }
             , { fixed: 'right', title: '操作', toolbar: '#barDemo' }
-
           ]]
-          , page: true
+          , page: {
+            layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+            , groups: 5 //显示的连续页码
+            , first: false //不显示首页
+            , last: false //不显示尾页
+          }
+          , response: {
+            statusName: 'status'
+            , countName: 'total'
+          }
         });
 
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
           var checkStatus = table.checkStatus(obj.config.id);
           switch (obj.event) {
-            case 'getCheckData':
+            case 'add'://添加
+              layer.open({
+                title: '添加链接',
+                type: 2,
+                shade: false,
+                area: ['400px', '320px'],
+                offset: ['25px', '25%'],
+                content: 'link/addLink.html',
+                shade: [0.3, '#393D49'], //遮罩层
+                zIndex: layer.zIndex,
+                success: function (layero) {
+                  layer.setTop(layero); //设置窗口为最顶层
+                }
+              });
+              break;
+            case 'delMore': //批量删除
               var data = checkStatus.data;
-              layer.alert(JSON.stringify(data));
-              break;
-            case 'getCheckLength':
-              var data = checkStatus.data;
-              layer.msg('选中了：' + data.length + ' 个');
-              break;
-            case 'isAll':
-              layer.msg(checkStatus.isAll ? '全选' : '未全选');
-              break;
-
-            //自定义头工具栏右侧图标 - 提示
-            case 'LAYTABLE_TIPS':
-              layer.alert('这是工具栏右侧自定义的一个图标按钮');
+              var ids = [];
+              $.each(data, function (i, item) {
+                ids.push(item.id);
+              })
+              layer.msg(JSON.stringify(ids))
+              $.ajax({
+                url: 'http://localhost:8202/link/link/' + ids,
+                type: 'delete',
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                headers: {
+                  Authorization: storage.getItem('token')
+                },
+                success: function (data) {
+                  if (data.status == '200') {
+                    layer.msg(data.message);
+                    table.reload('test', {});
+                  } else {
+                    layer.msg(data.message);
+                  }
+                },
+              })
               break;
           };
         });
 
-        //监听行工具事件
+        //每条数据右侧操作
         table.on('tool(test)', function (obj) {
           var data = obj.data;
-          //console.log(obj)
-          if (obj.event === 'del') {
-            layer.confirm('真的删除行么', function (index) {
-              obj.del();
-              layer.close(index);
+          if (obj.event === 'del') {//单个删除
+            layer.open({
+              content: '确定要删除该链接？',
+              yes: function (index, layero) {
+                layer.close(index);
+                $.ajax({
+                  url: 'http://localhost:8202/link/link/' + data.id,
+                  type: 'delete',
+                  dataType: "json",
+                  contentType: "application/json;charset=utf-8",
+                  headers: {
+                    Authorization: storage.getItem('token')
+                  },
+                  success: function (data) {
+                    if (data.status == '200') {
+                      layer.msg(data.message);
+                      table.reload('test', {});
+                    } else {
+                      layer.msg(data.message);
+                    }
+                  }
+                })
+              }
             });
-          } else if (obj.event === 'edit') {
-            layer.prompt({
-              formType: 2
-              , value: data.email
-            }, function (value, index) {
-              obj.update({
-                email: value
-              });
-              layer.close(index);
+          } else if (obj.event === 'edit') {//编辑
+            layer.open({
+              title: '编辑链接',
+              type: 2,
+              shade: false,
+              area: ['400px', '320px'],
+              offset: ['25px', '25%'],
+              content: 'link/editLink.html',
+              shade: [0.3, '#393D49'], //遮罩层
+              zIndex: layer.zIndex,
+              success: function (layero) {
+                storage.setItem('linkId', data.id)
+                layer.setTop(layero); //设置窗口为最顶层
+              }
             });
           }
         });
+
+        //搜索
+        $('.searchLink').click(function () {
+          var keyword = $('.searchContent').val();
+          console.log(keyword);
+          table.reload('test', {
+            url: 'http://localhost:8202/link/link/search/' + keyword
+          });
+        })
       });
     </script>
 </body>
