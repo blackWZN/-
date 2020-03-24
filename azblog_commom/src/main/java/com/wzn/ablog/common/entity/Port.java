@@ -19,7 +19,7 @@ public class Port {
     private String module;
     private String create_time;
 
-    @ManyToMany(targetEntity = Role.class)
+    @ManyToMany(targetEntity = Role.class,fetch=FetchType.EAGER)
     @JoinTable(name = "sys_port_role",//中间表的名称
             joinColumns = {@JoinColumn(name = "port_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "role_id")}

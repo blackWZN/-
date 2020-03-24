@@ -1,6 +1,9 @@
 package com.wzn.ablog.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wzn.ablog.common.entity.Admin;
+import com.wzn.ablog.common.vo.Payload;
+import com.wzn.ablog.common.vo.PortRoleData;
 import com.wzn.ablog.common.vo.Result;
 import org.springframework.util.CollectionUtils;
 
@@ -8,10 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class BlogUtils {
 
@@ -115,5 +117,46 @@ public class BlogUtils {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 把对象转成Map
+     */
+    public static <T> Map<String, Object> objectToMap(T t) {
+        if (t == null) {
+            return null;
+        }
+        Map<String, Object> map = new HashMap<>();
+        Field[] fields = t.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                map.put(field.getName(), field.get(t));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 格式化接口url
+     * @param portUrl 接口url
+     * @param urlType 接口类型
+     * @return
+     */
+    public static String formatPort(String portUrl,String urlType){
+        return portUrl + " -" + urlType;
+    }
+
+    //获取表中格式化的接口权限
+    public static List<String> getPortRole(List<Object[]> objects) {
+        List<PortRoleData> portRoleDataList = BlogUtils.castEntity(objects, PortRoleData.class);
+        List<String> portRole = new ArrayList<>();
+        for (PortRoleData portRoleData : portRoleDataList) {
+            String role = formatPort(portRoleData.getPort_url(), portRoleData.getUrl_type());
+            portRole.add(role);
+        }
+        return portRole;
     }
 }
