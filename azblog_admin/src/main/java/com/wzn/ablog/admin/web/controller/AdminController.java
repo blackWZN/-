@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/admin")
-@Api(tags = {"用户"})
+@Api(tags = {"管理员"})
 public class AdminController {
 
     @Autowired
@@ -110,7 +110,7 @@ public class AdminController {
     }
 
     @Authorized
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation(value = "根据id查找用户",notes = "token需要包含ROOT和ADMIN权限")
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result findById(@PathVariable String id) {
@@ -121,9 +121,8 @@ public class AdminController {
         return new Result("200", "查询成功", admin);
     }
 
-    @Authorized
     @PostMapping("/getUserame/{id}")
-    @ApiOperation(value = "获取用户名",notes = "token需要包含ROOT和ADMIN权限")
+    @ApiOperation(value = "获取用户名")
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public Result getUsernameById(@PathVariable String id) {
         log.debug(TokenUtils.getUserId(request, rsaKeyConfig));
@@ -163,8 +162,8 @@ public class AdminController {
     }
 
     @Authorized
-    @GetMapping("search/{keyword}")
-    @ApiOperation(value = "根据用户名搜索",notes = "token需要包含ROOT和ADMIN权限")
+    @GetMapping("/search/{keyword}")
+    @ApiOperation(value = "根据用户名搜索")
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public PageResult searchByUsername(@PathVariable String keyword,int page,int limit){
         Page<Admin> admins = adminService.searchByUsername(keyword, page, limit);

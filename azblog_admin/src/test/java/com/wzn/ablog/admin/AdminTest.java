@@ -3,6 +3,7 @@ package com.wzn.ablog.admin;
 import com.wzn.ablog.admin.config.AdminRsaKeyConfig;
 import com.wzn.ablog.admin.dao.*;
 import com.wzn.ablog.common.entity.*;
+import com.wzn.ablog.common.utils.BlogUtils;
 import com.wzn.ablog.common.utils.JwtUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,8 @@ public class AdminTest {
     @Autowired
     private RoleDao roleDao;
 
-
+    @Autowired
+    private PortDao portDao;
 
     @Test
     public void test1(){
@@ -71,9 +73,15 @@ public class AdminTest {
 
     @Test
     public void test4(){
-//        redisTemplate.opsForValue().set("1","a");
-        String o = (String) redisTemplate.opsForValue().get("1");
-        System.out.println(o);
+        List<Port> ports = portDao.findAll();
+        //选中该角色所拥有的的权限
+        List<Map<String,Object>> maps = new ArrayList<>();
+        for(Port port : ports){
+            Map<String, Object> map = BlogUtils.objectToMap(port);
+            map.put("LAY_CHECKED","true");
+            maps.add(map);
+        }
+
     }
 
 

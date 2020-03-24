@@ -65,10 +65,18 @@ public interface AdminDao extends JpaRepository<Admin, String>, JpaSpecification
             "AND role_id = :roleId",nativeQuery = true)
     int hasRole(@PathVariable("adminId") String adminId, @PathVariable("roleId") String roleId);
 
-
     //删除权限
     @Query(value = "DELETE FROM sys_admin_role WHERE admin_id = :adminId \n" +
             "AND role_id = :roleId",nativeQuery = true)
     @Modifying
     void delRole(@PathVariable("adminId") String adminId, @PathVariable("roleId") String roleId);
+
+    //删除用户对应的角色
+    @Query(value = "DELETE FROM sys_admin_role WHERE admin_id = :adminId",nativeQuery = true)
+    @Modifying
+    void delAllRole(String adminId);
+
+    //更新权限
+    @Query(value = "INSERT INTO sys_admin_role (id,admin_id,role_id) VALUES(:id,:adminId,:roleId);",nativeQuery = true)
+    void updateRole(@Param("id") String id,@Param("adminId") String adminId,@Param("roleId") String roleId);
 }

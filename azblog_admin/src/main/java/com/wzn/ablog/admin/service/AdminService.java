@@ -1,6 +1,7 @@
 package com.wzn.ablog.admin.service;
 
 import com.wzn.ablog.admin.dao.AdminDao;
+import com.wzn.ablog.admin.dao.RoleDao;
 import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.entity.Role;
 import com.wzn.ablog.common.utils.IdWorker;
@@ -154,42 +155,10 @@ public class AdminService implements UserDetailsService {
                 status.equals("on") ? "1" : "0", (String) params.get("id"));
 
         //修改权限
-        //选择ADMIN
-        if (params.get(this.ROLE_ADMIN) != null && params.get(this.ROLE_ADMIN).equals("on")) {
-            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ADMIN);
-            //表里没有ADMIN权限，就增加ADMIN权限
-            int count = adminDao.hasRole((String) params.get("id"), roleId);
-            if (count == 0) {
-                adminDao.setRoles(idWorker.nextId() + "", (String) params.get("id"), roleId);
-            }
-        }
-        //选择ROOT
-        if (params.get(this.ROLE_ROOT) != null && params.get(this.ROLE_ROOT).equals("on")) {
-            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ROOT);
-            //表里没有ROOT权限，就增加ROOT权限
-            int count = adminDao.hasRole((String) params.get("id"), roleId);
-            if (count == 0) {
-                adminDao.setRoles(idWorker.nextId() + "", (String) params.get("id"), roleId);
-            }
-        }
-
-        //没有选择ADMIN
-        if (params.get(this.ROLE_ADMIN) == null) {
-            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ADMIN);
-            int count = adminDao.hasRole((String) params.get("id"), roleId);
-            if (count >= 1) {//有该权限就删除
-                adminDao.delRole((String) params.get("id"),roleId);
-            }
-        }
-
-        //没有选择ROOT
-        if (params.get(this.ROLE_ROOT) == null) {
-            String roleId = adminDao.findRoleIdByRoleName(this.ROLE_ROOT);
-            int count = adminDao.hasRole((String) params.get("id"), roleId);
-            if (count >= 1) {//有该权限就删除
-                adminDao.delRole((String) params.get("id"),roleId);
-            }
-        }
+        String adminId = params.get("id")+"";
+        String roleId = params.get("roleId")+"";
+        adminDao.delAllRole(adminId);
+        adminDao.setRoles(idWorker.nextId()+"",adminId,roleId);
 
     }
 }
