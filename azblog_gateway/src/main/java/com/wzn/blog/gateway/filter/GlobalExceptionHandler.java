@@ -15,6 +15,8 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.NoRouteToHostException;
+
 @Slf4j
 @Component
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
@@ -24,12 +26,15 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         log.info("GLOBAL EXCEPTION:{}, \n{}", serverWebExchange.getRequest().getPath(), throwable);
         Result result = new Result();
         if (throwable instanceof NullPointerException) {
-            result.setStatus("500").setMessage("请登录后操作");
+            result.setStatus("501").setMessage("请登录后操作");
         } else if (throwable instanceof SignatureException) {
-            result.setStatus("500").setMessage("token错误");
+            result.setStatus("502").setMessage("token错误");
         } else if(throwable instanceof ExpiredJwtException){
-            result.setStatus("500").setMessage("身份过期请重新登录");
-        }else{
+            result.setStatus("503").setMessage("身份过期请重新登录");
+        }else if(throwable instanceof NoRouteToHostException){
+            result.setStatus("504").setMessage("网关路由异常");
+        }
+        else{
             result.setStatus("500").setMessage(throwable.getMessage());
         }
 

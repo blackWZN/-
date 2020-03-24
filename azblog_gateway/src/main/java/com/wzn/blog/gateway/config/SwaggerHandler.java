@@ -26,21 +26,18 @@ public class SwaggerHandler {
     }
 
     @RequestMapping(value = "/configuration/security", method = RequestMethod.GET)
-//    @GetMapping("/configuration/security")
     public Mono<ResponseEntity<SecurityConfiguration>> securityConfiguration() {
         return Mono.just(new ResponseEntity<>(
                 Optional.ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK));
     }
 
     @RequestMapping(value = "/configuration/ui", method = RequestMethod.GET)
-//    @GetMapping("/configuration/ui")
     public Mono<ResponseEntity<UiConfiguration>> uiConfiguration() {
         return Mono.just(new ResponseEntity<>(
                 Optional.ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK));
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-//    @GetMapping("")
     public Mono<ResponseEntity> swaggerResources() {
         return Mono.just((new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK)));
     }
