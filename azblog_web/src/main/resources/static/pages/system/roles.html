@@ -14,22 +14,22 @@
 
 <body>
   <!-- 搜索 -->
-  <form class="layui-form" action="">
+  <form class="layui-form">
     <div id="search" class="layui-form-item">
 
       <div class="layui-input-block">
         <input type="text" name="title" required lay-verify="required" placeholder="请输入搜索内容" autocomplete="off"
-          class="layui-input">
+          class="layui-input searchContent">
       </div>
 
       <div id="searchBtn" class="layui-input-block">
-        <button class="layui-btn" lay-submit lay-filter="formDemo">搜索</button>
+        <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
       </div>
     </div>
   </form>
   <!-- 数据 -->
-  <table class="layui-hide" id="test" lay-filter="test">
+  <table class="layui-hide" id="list" lay-filter="list">
 
     <script type="text/html" id="toolbar">
 
@@ -41,18 +41,18 @@
     <script type="text/html" id="bar">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">查看权限</a>
-
+    <a class="layui-btn layui-btn-xs" lay-event="editRole">权限管理</a>
   </script>
 
 
     <script>
-      layui.use('table', function () {
+      layui.use(['table', 'jquery', 'form'], function () {
         var table = layui.table;
         var storage = window.localStorage;
-
+        var $ = layui.jquery;
+        var form = layui.form;
         table.render({
-          elem: '#test'
+          elem: '#list'
           , url: 'http://localhost:8202/role/role/roleList'
           , toolbar: '#toolbar' //开启头部工具栏，并为其绑定左侧模板
           , title: '用户数据表'
@@ -72,48 +72,135 @@
             , first: false //不显示首页
             , last: false //不显示尾页
           }
-          , response: {
-            statusName: 'status'
-            , countName: 'total'
+          , parseData: function (res) { //res 即为原始返回的数据
+            return {
+              "code": res.status, //解析接口状态
+              "msg": res.message, //解析提示文本
+              "data": res.data,
+              "count": res.total,
+            }
           }
         });
 
         //头工具栏事件
-        table.on('toolbar(test)', function (obj) {
+        table.on('toolbar(list)', function (obj) {
           var checkStatus = table.checkStatus(obj.config.id);
           switch (obj.event) {
             case 'add'://添加
-              var data = checkStatus.data;
-              layer.alert(JSON.stringify(data));
+              layer.open({
+                title: '添加权限',
+                type: 2,
+                shade: false,
+                area: ['430px', '420px'],
+                offset: ['25px', '25%'],
+                content: 'addRole.html',
+                shade: [0.3, '#393D49'], //遮罩层
+                zIndex: layer.zIndex,
+                success: function (layero) {
+                  layer.setTop(layero); //设置窗口为最顶层
+                }
+              });
               break;
             case 'delMore'://批量删除
-             
+
               break;
           };
         });
 
         //监听行工具事件
-        table.on('tool(test)', function (obj) {
+        table.on('tool(list)', function (obj) {
           var data = obj.data;
-          //console.log(obj)
           if (obj.event === 'del') {//单个删除
-            layer.confirm('真的删除行么', function (index) {
-              obj.del();
-              layer.close(index);
+            layer.open({
+              content: '确定要删除该角色？',
+              yes: function (index, layero) {
+                layer.close(index);
+                $.ajax({
+                  url: 'http://localhost:8202/role/role/' + data.role_id,
+                  type: 'delete',
+                  dataType: "json",
+                  contentType: "application/json;charset=utf-8",
+                  headers: {
+                    Authorization: storage.getItem('token')
+                  },
+                  success: function (res) {
+                    if (res.status == '200') {
+                      layer.msg(res.message);
+                      table.reload('list', {});
+                    } else {
+                      layer.msg(res.message)
+                    }
+                  },
+                });
+              }
             });
-          } else if (obj.event === 'edit') 
-          {//编辑
-            layer.prompt({
-              formType: 2
-              , value: data.email
-            }, function (value, index) {
-              obj.update({
-                email: value
-              });
-              layer.close(index);
+
+
+          } else if (obj.event === 'edit') {//编辑
+            $.ajax({
+              url: 'http://localhost:8202/role/role/' + data.role_id,
+              type: 'get',
+              dataType: "json",
+              contentType: "application/json;charset=utf-8",
+              headers: {
+                Authorization: storage.getItem('token')
+              },
+              success: function (res) {
+                if (res.status == '200') {
+                  layer.open({
+                    title: '角色编辑',
+                    type: 2,
+                    shade: false,
+                    area: ['430px', '400px'],
+                    offset: ['25px', '25%'],
+                    content: 'editRole.html',
+                    shade: [0.3, '#393D49'], //遮罩层
+                    zIndex: layer.zIndex,
+                    success: function (layero) {
+                      storage.setItem('roleId', data.role_id);
+                      layer.setTop(layero); //设置窗口为最顶层
+                    }
+                  });
+                } else {
+                  layer.msg(res.message)
+                }
+              },
+            });
+
+          } else if (obj.event === 'editRole') {
+            layer.open({
+              title: '权限管理',
+              type: 2,
+              shade: false,
+              area: ['730px', '400px'],
+              offset: ['25px', '25%'],
+              content: 'port.html',
+              shade: [0.3, '#393D49'], //遮罩层
+              zIndex: layer.zIndex,
+              success: function (layero) {
+                storage.setItem('roleId', data.role_id);
+                layer.setTop(layero); //设置窗口为最顶层
+              }
             });
           }
         });
+
+        //搜索
+        form.on('submit(search)', function (data) {
+          var keyword = $('.searchContent').val();
+          console.log(keyword);
+          table.reload('list', {
+            url: 'http://localhost:8202/role/role/search/' + keyword
+          });
+          return false;
+        })
+
+        //重置
+        $('#searchBtn button').eq(1).click(function () {
+          table.reload('list', {
+            url: 'http://localhost:8202/role/role/roleList'
+          });
+        })
       });
     </script>
 </body>

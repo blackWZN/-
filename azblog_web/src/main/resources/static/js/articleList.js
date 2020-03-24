@@ -62,10 +62,13 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
             , first: false //不显示首页
             , last: false //不显示尾页
         }
-        , response: {
-            statusName: 'status'
-            , countName: 'total'
-
+        , parseData: function (res) { //res 即为原始返回的数据
+            return {
+                "code": res.status, //解析接口状态
+                "msg": res.message, //解析提示文本
+                "data": res.data,
+                "count": res.total, 
+            }
         }
     });
 
@@ -106,7 +109,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                         if (data.status == '200') {
                             layer.msg(data.message);
                             table.reload('list', {});
-                        }else{
+                        } else {
                             layer.msg(data.message);
                         }
                     },
@@ -131,7 +134,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                     if (data.status == '200') {
                         layer.msg(data.message);
                         table.reload('list', {});
-                    }else{
+                    } else {
                         layer.msg(data.message);
                     }
                 }
@@ -148,7 +151,7 @@ layui.use(['table', 'jquery', 'layer', 'form', 'table', 'layedit', 'laydate'], f
                     layer.setTop(layero);
                     storage.setItem('articleId', data.id);
                 }
-             
+
             });
         }
     });

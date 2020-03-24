@@ -17,7 +17,7 @@ layui.use(['element', 'jquery', 'layer', 'laytpl'], function () {
             Authorization: storage.getItem('token')
         },
         success: function (data) {
-            if (data.status == '500') {
+            if (data.status == '503') {
                 storage.removeItem('token');
                 layer.open({
                     content: '身份认证失败，请重新登录',

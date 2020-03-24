@@ -126,8 +126,8 @@
                   option.attr('value', item.id);
                   option.text(item.name);
                   option.appendTo(cate);
-                  var categoryVal = $('form select').find('option');
                   //获取到分类并设置选中
+                  var categoryVal = $('form select').find('option');
                   $.each(categoryVal, function (i, item) {
                     if ($(item).val() == articleDta.category_id) {
                       option.attr('selected', 'selected');

@@ -71,9 +71,13 @@
             , first: false //不显示首页
             , last: false //不显示尾页
           }
-          , response: {
-            statusName: 'status'
-            , countName: 'total'
+          , parseData: function (res) { //res 即为原始返回的数据
+            return {
+              "code": res.status, //解析接口状态
+              "msg": res.message, //解析提示文本
+              "data": res.data,
+              "count": res.total,
+            }
           }
         });
 

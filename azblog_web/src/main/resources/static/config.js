@@ -50,7 +50,7 @@ layui.use('jquery', function () {
         $('#content iframe').attr('src', 'system/roles.html');
     })
     $('.layui-nav-tree li').eq(2).find('dl dd').eq(2).on('click', function () {
-        $('#content iframe').attr('src', 'system/menu.html');
+        $('#content iframe').attr('src', 'system/port/portManage.html');
     })
     //友情链接
     $('.layui-nav-tree li').eq(3).on('click', function () {

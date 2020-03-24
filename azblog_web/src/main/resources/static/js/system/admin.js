@@ -42,11 +42,15 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
             , first: false //不显示首页
             , last: false //不显示尾页
         }
-        , response: {
-            statusName: 'status'
-            , countName: 'total'
-
+        , parseData: function (res) { //res 即为原始返回的数据
+            return {
+                "code": res.status, //解析接口状态
+                "msg": res.message, //解析提示文本
+                "data": res.data,
+                "count": res.total,
+            }
         }
+
     });
 
     //头工具栏事件
@@ -163,5 +167,12 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
             url: 'http://localhost:8202/admin/admin/search/' + keyword
         });
         return false;
+    })
+
+    //重置
+    $('#searchBtn button').eq(1).click(function () {
+        table.reload('list', {
+            url: 'http://localhost:8202/admin/admin/'
+        });
     })
 });

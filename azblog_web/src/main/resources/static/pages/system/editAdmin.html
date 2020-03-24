@@ -35,8 +35,10 @@
         <div class="layui-form-item">
             <label class="layui-form-label">角色</label>
             <div class="layui-input-block">
-                <input type="checkbox" name="ADMIN" title="ADMIN">
-                <input type="checkbox" name="ROOT" title="ROOT">
+                <select name="roleId" id="loadRole" lay-verify="required">
+                    <option value=""></option>
+
+                </select>
             </div>
         </div>
 
@@ -62,6 +64,7 @@
             var $ = layui.jquery;
             var storage = window.localStorage;
             var adminId = storage.getItem('adminId');
+            var adminData = {};
             //回显数据
             $.ajax({
                 url: 'http://localhost:8202/admin/admin/' + adminId,
@@ -73,6 +76,7 @@
                 },
                 success: function (res) {
                     if (res.status == '200') {
+                        adminData = res.data;
                         $('.adminInfo input').eq(0).val(res.data.username);
                         $('.adminInfo input').eq(1).val(res.data.email);
 
@@ -82,24 +86,42 @@
                             form.render('checkbox');
                         }
 
-                        $.each(res.data.roles, function (i, item) {
-                            if (item.role_name == 'ADMIN') {
-                                $('.adminInfo input').eq(3).attr('checked', 'checked');
-                                form.render('checkbox');
-                            }
-                            if (item.role_name == 'ROOT') {
-                                $('.adminInfo input').eq(4).attr('checked', 'checked');
-                                form.render('checkbox');
-                            }
-                        })
+                        //角色
+                        $.ajax({
+                            url: 'http://localhost:8202/role/role/allRole',
+                            type: 'get',
+                            dataType: "json",
+                            contentType: "application/json;charset=utf-8",
+                            headers: {
+                                Authorization: storage.getItem('token')
+                            },
+                            success: function (res) {
+                                if (res.status == '200') {
+                                    var select = $('#loadRole');
+                                    $.each(res.data, function (i, item) {
+                                        var option = $('<option />');
+                                        option.attr('value', item.role_id);
+                                        option.text(item.role_name);
+                                        option.appendTo(select);
+                                        if (item.role_id == adminData.roles[0].role_id) {
+                                            option.attr('selected', 'selected');
+                                        };
+                                        form.render("select");
+                                    })
 
+                                } else {
+                                    layer.msg(res.message)
+                                }
+
+                            },
+                        });
+
+                        //性别
                         if (res.data.sex == '男') {
-                            $('.adminInfo input').eq(5).attr('checked', 'checked');
+                            $('.adminInfo input').eq(4).attr('checked', 'checked');
                             form.render('radio');
-                        }
-
-                        if (res.data.sex == '女') {
-                            $('.adminInfo input').eq(6).attr('checked', 'checked');
+                        } else {
+                            $('.adminInfo input').eq(5).attr('checked', 'checked');
                             form.render('radio');
                         }
 
@@ -132,8 +154,6 @@
 
                     },
                 });
-
-                console.log(JSON.stringify(formData))
             })
 
             //获取表单数据
