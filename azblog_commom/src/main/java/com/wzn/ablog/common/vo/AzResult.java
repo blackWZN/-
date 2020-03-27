@@ -1,12 +1,13 @@
 package com.wzn.ablog.common.vo;
 
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 @Data
 public class AzResult {
 
-    private int status;
+    private Integer status;
     private String message;
     private Object data;
 
@@ -14,14 +15,18 @@ public class AzResult {
     }
 
     public static AzResult ok(){
-        return ok("操作成功");
+        return ok(AzContants.SUCCESS_MSG);
+    }
+
+    public static AzResult ok(Integer status){
+        return ok(status,AzStatus.RESP_MSG.get("status"));
     }
 
     public static AzResult ok(String msg){
         return ok(200,msg);
     }
 
-    public static AzResult ok(int status, String msg) {
+    public static AzResult ok(Integer status, String msg) {
         AzResult azResult = new AzResult();
         azResult.setStatus(status);
         azResult.setMessage(msg);
@@ -29,14 +34,18 @@ public class AzResult {
     }
 
     public static AzResult err(){
-        return err("操作失败");
+        return err(AzContants.ERR_MSG);
+    }
+
+    public static AzResult err(Integer status){
+        return err(status,AzStatus.RESP_MSG.get("status"));
     }
 
     public static AzResult err(String msg){
         return err(500,msg);
     }
 
-    public static AzResult err(int status, String msg) {
+    public static AzResult err(Integer status, String msg) {
         AzResult azResult = new AzResult();
         azResult.setStatus(status);
         azResult.setMessage(msg);

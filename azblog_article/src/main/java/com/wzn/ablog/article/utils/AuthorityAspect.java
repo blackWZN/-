@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Component
+//@Component
 @Aspect
 public class AuthorityAspect {
 

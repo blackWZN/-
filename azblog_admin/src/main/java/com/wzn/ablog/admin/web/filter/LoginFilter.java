@@ -51,7 +51,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             return manager.authenticate(authenticationToken);
         } catch (Exception e) {
             this.logger.debug("用户名或密码错误");
-            BlogUtils.respMsg(response, "500", "用户名或密码错误", null);
+            BlogUtils.respMsg(response, 500, "用户名或密码错误", null);
             e.printStackTrace();
 
             return null;
@@ -61,7 +61,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         this.logger.debug("认证失败");
-        BlogUtils.respMsg(response, "500", "服务器内部错误", null);
+        BlogUtils.respMsg(response, 500, "服务器内部错误", null);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //私钥生成token
         String token = JwtUtils.generateTokenExpireInMinutes(admin, adminRsaKeyConfig.getPrivateKey(), 24 * 60);
         //将token响应给客户端
-        BlogUtils.respMsg(response, "200", "登录成功", token);
+        BlogUtils.respMsg(response, 200, "登录成功", token);
     }
 
 

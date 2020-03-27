@@ -24,9 +24,9 @@
 
         #codeBtn {
             margin-top: 5px;
-            background: #f2f2f2;
+            /* background: #f2f2f2;
             color: #555;
-            border: 1px solid;
+            border: 1px solid; */
         }
 
         .layui-card {
@@ -37,46 +37,42 @@
 
 <body>
 
-    <form  class="layui-form" action="" method="post">
+    <form class="layui-form">
         <div class="layui-card">
-            <div class="layui-card-header">系统登陆</div>
+            <div class="layui-card-header">注册账号</div>
             <div class="layui-card-body">
                 <div class="layui-form-item">
                     <label class="layui-form-label">邮箱</label>
                     <div class="layui-input-block">
-                        <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱"
-                            autocomplete="off" class="layui-input">
+                        <input type="text" name="email" lay-verify="required" placeholder="请输入邮箱" autocomplete="off"
+                            class="layui-input email">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">验证码</label>
                     <div class="layui-input-block">
-                        <input type="text" name="code" required lay-verify="required" placeholder="请输入密码"
-                            autocomplete="off" class="layui-input">
-                        <button id="codeBtn" class="layui-btn" lay-submit lay-filter="formDemo">获取验证码</button>
-
+                        <input type="text" name="code" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+                        <button type="button" class="layui-btn layui-btn-normal codeBtn">获取验证码</button>
                     </div>
-
-
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" required lay-verify="required" placeholder="请输入密码"
-                            autocomplete="off" class="layui-input">
+                        <input type="text" name="username" lay-verify="required" placeholder="请输入密码" autocomplete="off"
+                            class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">密码</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                        <input type="password" name="password" lay-verify="required" placeholder="请输入密码"
                             autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">确认密码</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                        <input type="password" name="password" lay-verify="required" placeholder="请输入密码"
                             autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -94,12 +90,34 @@
             var form = layui.form;
             var $ = layui.jquery;
 
-    
+            //获取验证码
+            $('.codeBtn').click(function () {
+                layer.load(2);
+                var email = $('.email').val();
+                if (email != '') {
+                    $.ajax({
+                        url: 'http://localhost:8202/admin/admin/code/' + email,
+                        type: 'get',
+                        dataType: "json",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            layer.closeAll('loading');
+                            layer.msg(data.message, {
+                                icon: 6,//成功的表情
+                                time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                
+                            });
+                        }
+                    })
+                }
+            })
+
             //监听提交
             form.on('submit(formDemo)', function (data) {
                 layer.load(2);
                 $.ajax({
-                    url: 'http://localhost:8202/admin/apply',
+                    url: 'http://localhost:8202/admin/admin/apply',
                     type: 'post',
                     data: JSON.stringify(data.field),
                     dataType: "json",
@@ -110,9 +128,7 @@
                             layer.msg(data.message, {
                                 icon: 6,//成功的表情
                                 time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                            }, function () {
-
-                            });
+                            }, function () {});
                         } else {
                             layer.msg(data.message, { icon: 2, time: 1000 });
                         }

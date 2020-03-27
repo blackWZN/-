@@ -6,12 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
 @Data
-@Table(name = "echarts_dimensions")
-public class EchartsDimensions {
+@Entity
+@Table(name = "visitor")
+public class Visitor {
     @Id
     private String id;
-    private String name;
-    private String status;
+    private String host;
+    private String time;
 }

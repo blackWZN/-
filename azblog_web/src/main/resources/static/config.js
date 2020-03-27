@@ -36,11 +36,9 @@ layui.use('jquery', function () {
         $('#content iframe').attr('src', 'article/articleList.html');
     })
     $('.layui-nav-tree li').eq(1).find('dl dd').eq(1).on('click', function () {
-        $('#content iframe').attr('src', 'article/category.html');
+        $('#content iframe').attr('src', 'article/category/category.html');
     })
-    $('.layui-nav-tree li').eq(1).find('dl dd').eq(2).on('click', function () {
-        $('#content iframe').attr('src', 'article/comment.html');
-    })
+  
  
     //系统管理路由
     $('.layui-nav-tree li').eq(2).find('dl dd').eq(0).on('click', function () {

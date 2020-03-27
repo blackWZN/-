@@ -2,6 +2,8 @@ package com.wzn.ablog.admin.web.controller;
 
 import com.wzn.ablog.admin.service.RoleService;
 import com.wzn.ablog.common.annotation.Authorized;
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.entity.Port;
 import com.wzn.ablog.common.entity.Role;
 import com.wzn.ablog.common.utils.BlogUtils;
@@ -43,7 +45,7 @@ public class RoleController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public PageResult roleList(int page, int limit) {
         Page<Role> rolePage = roleService.roleList(page, limit);
-        return new PageResult("0", "加载完成", rolePage.getTotalElements(), rolePage.getTotalPages()
+        return new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG, rolePage.getTotalElements(), rolePage.getTotalPages()
                 , rolePage.getContent());
     }
 
@@ -53,7 +55,7 @@ public class RoleController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public AzResult allRole(){
         List<Role> list = roleService.allRole();
-        return AzResult.ok().data(list);
+        return AzResult.ok(AzStatus.SUCCESS).data(list);
     }
 
     @Authorized
@@ -62,7 +64,7 @@ public class RoleController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public AzResult portList(String roleId) {
         List<Map<String, Object>> maps = roleService.portList(roleId);
-        return AzResult.ok(0,"操作成功").data(maps);
+        return AzResult.ok(AzStatus.PAGE).data(maps);
     }
 
     @Authorized
@@ -72,9 +74,9 @@ public class RoleController {
     public AzResult findbyId(@PathVariable String id) {
         Role role = roleService.findById(id);
         if(role == null){
-            return AzResult.err("ROOT角色不可编辑");
+            return AzResult.err(AzStatus.ROOT_ISNOT_EDIT);
         }
-        return AzResult.ok().data(role);
+        return AzResult.ok(AzStatus.SUCCESS).data(role);
     }
 
     @Authorized
@@ -84,9 +86,9 @@ public class RoleController {
     public AzResult del(@PathVariable String[] ids) {
         boolean b = roleService.del(ids);
         if(b){
-            return AzResult.ok("删除成功");
+            return AzResult.ok(AzStatus.SUCCESS);
         }else {
-            return AzResult.err("ROOT角色不可删除");
+            return AzResult.err(AzStatus.ROOT_ISNOT_DELETE);
         }
 
     }
@@ -97,7 +99,7 @@ public class RoleController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public AzResult add(@RequestBody Role Role) {
         roleService.add(Role);
-        return AzResult.ok("添加成功");
+        return AzResult.ok();
     }
 
     @Authorized
@@ -106,7 +108,7 @@ public class RoleController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public AzResult update(@RequestBody Role role) {
         log.debug(String.valueOf(role));
-        return AzResult.ok("修改成功");
+        return AzResult.ok();
     }
 
     @Authorized
@@ -115,7 +117,7 @@ public class RoleController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public PageResult searchRole(@PathVariable String roleName, int page, int limit) {
         Page<Role> rolePage = roleService.searchRole(roleName,page,limit);
-        return new PageResult("0","搜索成功",rolePage.getTotalElements(),
+        return new PageResult(AzStatus.PAGE,AzContants.SUCCESS_MSG,rolePage.getTotalElements(),
                 rolePage.getTotalPages(),rolePage.getContent());
     }
 

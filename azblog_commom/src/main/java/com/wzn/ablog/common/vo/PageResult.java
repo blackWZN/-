@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageResult {
-    private String status;
+    private Integer status;
     private String message;
     private Long total;
     private int page;
     private Object data;
 
-    public PageResult(String status, String message) {
+    public PageResult(Integer status, String message) {
         this.status = status;
         this.message = message;
     }

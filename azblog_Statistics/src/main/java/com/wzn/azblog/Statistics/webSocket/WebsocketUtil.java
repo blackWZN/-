@@ -13,9 +13,6 @@ public class WebsocketUtil {
 		}
 		Async async = session.getAsyncRemote();
 		
-		//在Tomcat 8.0.x版本有效
-//		InetSocketAddress addr = (InetSocketAddress) getFieldInstance(async,"base#sos#socketWrapper#socket#sc#remoteAddress");
-		//在Tomcat 8.5以上版本有效
 		InetSocketAddress addr = (InetSocketAddress) getFieldInstance(async,"base#socketWrapper#socket#sc#remoteAddress");
 		return addr;
 	}

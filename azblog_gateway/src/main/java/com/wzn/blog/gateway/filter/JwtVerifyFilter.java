@@ -1,5 +1,6 @@
 package com.wzn.blog.gateway.filter;
 
+import com.wzn.ablog.common.contants.AzContants;
 import com.wzn.ablog.common.utils.JwtUtils;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.vo.Payload;
@@ -50,11 +51,12 @@ public class JwtVerifyFilter implements GlobalFilter, Ordered {
                 || path.contains("/admin/v2/api-docs")
                 || path.contains("/echarts/v2/api-docs")
                 || path.contains("/search/v2/api-docs")
-                || path.contains("/link/v2/api-docs")) {
+                || path.contains("/link/v2/api-docs")
+                || path.contains("/admin/code")) {
             return chain.filter(exchange);
         }
 
-        List<String> list = request.getHeaders().get("Authorization");
+        List<String> list = request.getHeaders().get(AzContants.TOKEN_HEAD);
         //获取token并解析校验
         String token = list.get(0);
         log.debug(token);

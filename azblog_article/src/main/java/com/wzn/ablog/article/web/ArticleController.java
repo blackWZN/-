@@ -5,6 +5,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.wzn.ablog.article.feign.SearchFeign;
 import com.wzn.ablog.article.service.ArticleService;
 import com.wzn.ablog.common.annotation.Authorized;
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.entity.Article;
 import com.wzn.ablog.common.utils.RsaKeyConfig;
 import com.wzn.ablog.common.utils.TokenUtils;
@@ -45,7 +47,7 @@ public class ArticleController {
     @GetMapping
     public PageResult list(Integer page, Integer limit) {
         Page<Article> list = articleService.list(page, limit, TokenUtils.getUserId(request,rsaKeyConfig));
-        return new PageResult("0", "列表加载完成", list.getTotalElements(),
+        return new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG, list.getTotalElements(),
                 list.getTotalPages(), list.getContent());
     }
 
@@ -54,7 +56,7 @@ public class ArticleController {
     @GetMapping("/{id}")
     public AzResult findById(@PathVariable String id) {
         Article article = articleService.findById(id);
-        return AzResult.ok("查找到文章").data(article);
+        return AzResult.ok().data(article);
     }
 
     @Authorized
@@ -63,7 +65,7 @@ public class ArticleController {
     @DeleteMapping("/{ids}")
     public AzResult del(@PathVariable("ids") String[] ids) {
         articleService.del(ids, TokenUtils.getUserId(request,rsaKeyConfig));
-        return AzResult.ok("删除成功");
+        return AzResult.ok();
     }
 
     @ApiOperation("添加文章")
@@ -73,7 +75,7 @@ public class ArticleController {
         log.debug(String.valueOf(article));
         articleService.add(article, TokenUtils.getUsername(request,rsaKeyConfig)
         ,TokenUtils.getUserId(request,rsaKeyConfig));
-        return AzResult.ok("添加成功");
+        return AzResult.ok();
     }
 
     @ApiOperation("更新文章")
@@ -82,7 +84,7 @@ public class ArticleController {
     public AzResult update(@RequestBody Article article) {
         articleService.update(article, TokenUtils.getUsername(request,rsaKeyConfig),
                 TokenUtils.getUserId(request,rsaKeyConfig));
-        return AzResult.ok("更新成功");
+        return AzResult.ok();
     }
 
     @ApiOperation("查找全部文章")
@@ -90,7 +92,7 @@ public class ArticleController {
     @GetMapping("/findAll")
     public AzResult findAll() {
         List<Article> all = articleService.findAll();
-        return AzResult.ok("查询成功").data(all);
+        return AzResult.ok().data(all);
     }
 
     @ApiOperation(value = "搜索",notes = "搜索文章并分页")

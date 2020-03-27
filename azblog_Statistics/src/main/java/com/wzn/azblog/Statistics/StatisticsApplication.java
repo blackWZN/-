@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         ManagementWebSecurityAutoConfiguration.class})
 @EntityScan("com.wzn.ablog.common.entity")
 @EnableFeignClients
-//@EnableScheduling
 public class StatisticsApplication {
     public static void main(String[] args) {
         SpringApplication.run(StatisticsApplication.class);

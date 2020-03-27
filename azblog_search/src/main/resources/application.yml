@@ -18,7 +18,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   rabbitmq:
-    host: 192.168.25.136
+    host: 122.51.252.120
     username: guest
     password: guest
   zipkin:

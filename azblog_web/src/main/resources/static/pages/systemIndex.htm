@@ -13,11 +13,12 @@
     <title>Document</title>
     <style>
         body {
-            background: #f2f2f2
+            background: #f2f2f2;
+            background: url(../images/1001266.jpg) no-repeat center;
         }
 
         .layui-container {
-            margin-top: 10px
+            margin: 100px
         }
 
         .percentage {
@@ -54,132 +55,73 @@
         <div class="layui-card layui-col-md3 layui-col-md-offset1">
             <div class="layui-card-header">网站访客</div>
             <div class="layui-card-body">
-                <h3>99</h3>
-                <h4>网站访客/日</h4>
+                <h3>0</h3>
+                <h4>网站访客</h4>
             </div>
         </div>
     </div>
 
-    <div class="layui-card layui-container layui-hide-xs" style="height: 400px;">
-        <div class="layui-card-header">图表</div>
-        <div class="layui-card-body layui-row">
-            <div class="layui-col-md6" id="EchartZhu" style="width: 500px;height: 300px;"></div>
-            <div class="layui-col-md5">
-                <div class="percentage">
-                    <p>在线用户</p>
-                    <p>同上期增长</p>
-                    <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
-                        <div class="layui-progress-bar" lay-percent="50%"></div>
-                    </div>
-                </div>
-
-                <div class="percentage">
-                    <p>文章数量</p>
-                    <p>同上期增长</p>
-                    <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
-                        <div class="layui-progress-bar layui-bg-blue" lay-percent="50%"></div>
-                    </div>
-                </div>
-
-                <div class="percentage">
-                    <p>网站访客</p>
-                    <p>同上期增长</p>
-                    <div class="layui-progress  layui-progress-big" lay-showPercent="yes">
-                        <div class="layui-progress-bar layui-bg-orange" lay-percent="50%"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
 
     <script>
-        layui.use('element', function () {
+        layui.use(['element', 'jquery'], function () {
             var element = layui.element;
+            var $ = layui.jquery;
+            var storage = window.localStorage;
+
+            //文章数
+            $.ajax({
+                url: 'http://127.0.0.1:8202/article/article/todayCount',
+                type: 'get',
+                headers: {
+                    Authorization: storage.getItem('token')
+                },
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data.status == '200') {
+                        $('.layui-container h3').eq(1).text(data.data);
+                    }
+                }
+            })
+
+            //在线人数
+            $.ajax({
+                url: 'http://127.0.0.1:8202/data/data/onlineCount',
+                type: 'get',
+                headers: {
+                    Authorization: storage.getItem('token')
+                },
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data.status == '200') {
+                        console.log(data.data);
+                        $('.layui-container h3').eq(0).text(data.data);
+                    }
+                }
+            })
+
+            //获取访客数
+            $.ajax({
+                url: 'http://127.0.0.1:8202/data/data/getVisitorCount',
+                type: 'get',
+                headers: {
+                    Authorization: storage.getItem('token')
+                },
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data.status == '200') {
+                        console.log(data.data);
+                        $('.layui-container h3').eq(2).text(data.data);
+                    }
+                }
+            })
         });
 
-        var storage = window.localStorage;
 
-        // 初始化图表
-        var myChart = echarts.init(document.getElementById('EchartZhu'));
 
-        // 指定图表的配置项和数据
-        option = {
-            legend: {},
-            tooltip: {},
-            dataset: {
-                // dimensions: ['name', '在线用户', '文章数量', '网站访客'],
-                // source: [
-                //     { name: '周一', '在线用户': 43.3, '文章数量': 85.8, '网站访客': 93.7 },
-                //     { name: '周二', '在线用户': 83.1, '文章数量': 73.4, '网站访客': 55.1 },
-                //     { name: '周三', '在线用户': 86.4, '文章数量': 65.2, '网站访客': 82.5 },
-                //     { name: '周四', '在线用户': 72.4, '文章数量': 53.9, '网站访客': 39.1 },
-                //     { name: '周五', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 },
-                //     { name: '周六', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 },
-                //     { name: '周日', '在线用户': 82.4, '文章数量': 93.9, '网站访客': 69.1 }
-                // ]
-            },
-            xAxis: { type: 'category' },
-            yAxis: {},
-            series: [
-                { type: 'line' },
-                { type: 'line' },
-                { type: 'line' }
-            ]
-        };
 
-        //图标数据
-        $.ajax({
-            url: 'http://127.0.0.1:8202/echarts/echarts/dataset',
-            type: 'get',
-            headers: {
-                Authorization: storage.getItem('token')
-            },
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                if (data.status == '200') {
-                    option.dataset = data.data;
-                    myChart.setOption(option);
-                }
-            }
-        })
-
-        //文章数
-        $.ajax({
-            url: 'http://127.0.0.1:8202/article/article/todayCount',
-            type: 'get',
-            headers: {
-                Authorization: storage.getItem('token')
-            },
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                if (data.status == '200') {
-                    $('.layui-container h3').eq(1).text(data.data);
-                }
-            }
-        })
-
-        //在线人数
-        $.ajax({
-            url: 'http://127.0.0.1:8202/echarts/echarts/onlineCount',
-            type: 'get',
-            headers: {
-                Authorization: storage.getItem('token')
-            },
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                if (data.status == '200') {
-                    console.log(data.data);
-                    $('.layui-container h3').eq(0).text(data.data);
-                }
-            }
-        })
-
-       
     </script>
 </body>
 

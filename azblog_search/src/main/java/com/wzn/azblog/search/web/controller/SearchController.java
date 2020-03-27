@@ -1,5 +1,7 @@
 package com.wzn.azblog.search.web.controller;
 
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.vo.PageResult;
 import com.wzn.azblog.search.entity.EsArticle;
 import com.wzn.azblog.search.entity.EsCategory;
@@ -24,7 +26,7 @@ public class SearchController {
     public PageResult search(@PathVariable("keywords") String keywords, @PathVariable Integer page, @PathVariable Integer limit){
 
         Page<EsArticle> pageInfo = articleService.searchArticle(keywords, page, limit);
-        return new PageResult("0","搜索成功",pageInfo.getTotalElements(),
+        return new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG,pageInfo.getTotalElements(),
                 pageInfo.getTotalPages(),pageInfo.getContent());
     }
 
@@ -32,7 +34,7 @@ public class SearchController {
     @GetMapping("/categroy/{keywords}/{page}/{limit}")
     public PageResult searchCategroy(@PathVariable("keywords") String keywords, @PathVariable Integer page, @PathVariable Integer limit){
         Page<EsCategory> pageInfo = articleService.searchCategroy(keywords, page, limit);
-        return new PageResult("0","搜索成功",pageInfo.getTotalElements(),
+        return new PageResult(AzStatus.PAGE,AzContants.SUCCESS_MSG,pageInfo.getTotalElements(),
                 pageInfo.getTotalPages(),pageInfo.getContent());
     }
 
@@ -40,7 +42,7 @@ public class SearchController {
     @GetMapping("/comment/{keywords}/{page}/{limit}")
     public PageResult searchComment(@PathVariable("keywords") String keywords, @PathVariable Integer page, @PathVariable Integer limit){
         Page<EsComment> pageInfo = articleService.searchComment(keywords, page, limit);
-        return new PageResult("0","搜索成功",pageInfo.getTotalElements(),
+        return new PageResult(AzStatus.PAGE,AzContants.SUCCESS_MSG,pageInfo.getTotalElements(),
                 pageInfo.getTotalPages(),pageInfo.getContent());
     }
 }

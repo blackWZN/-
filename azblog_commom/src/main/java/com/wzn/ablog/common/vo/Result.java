@@ -10,11 +10,11 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class Result {
-    private String status;
+    private Integer status;
     private String message;
     private Object data;
 
-    public Result(String status, String message) {
+    public Result(Integer status, String message) {
         this.status = status;
         this.message = message;
     }

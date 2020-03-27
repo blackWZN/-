@@ -1,6 +1,7 @@
 package com.wzn.ablog.admin.advice;
 
 import com.wzn.ablog.admin.dao.RoleDao;
+import com.wzn.ablog.common.contants.AzContants;
 import com.wzn.ablog.common.entity.Admin;
 import com.wzn.ablog.common.utils.BlogUtils;
 import com.wzn.ablog.common.utils.JwtUtils;
@@ -156,12 +157,12 @@ public class AuthorityAspect {
             }
         }
         //没有权限抛异常
-        throw new RuntimeException("权限不足");
+        throw new RuntimeException(AzContants.PERMISSION_DENIED);
     }
 
     //获取token中的用户id
     public String getUserId(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(AzContants.TOKEN_HEAD);
         Payload<Admin> info = JwtUtils.getInfoFromToken(token, rsaKeyConfig.getPublicKey(), Admin.class);
         String userId = (String) redisTemplate.opsForValue().get("userId" + info.getUserInfo().getId());
         return userId;

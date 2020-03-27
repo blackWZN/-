@@ -1,11 +1,11 @@
 package com.wzn.blog.gateway.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.vo.Result;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
-import io.lettuce.core.RedisCommandTimeoutException;
-import io.lettuce.core.RedisConnectionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.net.NoRouteToHostException;
 
 @Slf4j
@@ -23,19 +22,19 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange serverWebExchange, Throwable throwable) {
-        log.info("GLOBAL EXCEPTION:{}, \n{}", serverWebExchange.getRequest().getPath(), throwable);
+        log.info("路径："+serverWebExchange.getRequest().getPath()+"  异常信息："+throwable);
         Result result = new Result();
         if (throwable instanceof NullPointerException) {
-            result.setStatus("501").setMessage("请登录后操作");
+            result.setStatus(AzStatus.NOT_LOGIN).setMessage(AzStatus.RESP_MSG.get(AzStatus.NOT_LOGIN));
         } else if (throwable instanceof SignatureException) {
-            result.setStatus("502").setMessage("token错误");
+            result.setStatus(AzStatus.ERR_TOKEN).setMessage(AzStatus.RESP_MSG.get(AzStatus.ERR_TOKEN));
         } else if(throwable instanceof ExpiredJwtException){
-            result.setStatus("503").setMessage("身份过期请重新登录");
+            result.setStatus(AzStatus.TOKEN_EXPIRE).setMessage(AzStatus.RESP_MSG.get(AzStatus.TOKEN_EXPIRE));
         }else if(throwable instanceof NoRouteToHostException){
-            result.setStatus("504").setMessage("网关路由异常");
+            result.setStatus(AzStatus.ERR_ROUTE).setMessage(AzStatus.RESP_MSG.get(AzStatus.ERR_ROUTE));
         }
         else{
-            result.setStatus("500").setMessage(throwable.getMessage());
+            result.setStatus(AzStatus.ERR).setMessage(AzContants.ERR_SERVICE);
         }
 
         DataBufferFactory bufferFactory = serverWebExchange.getResponse().bufferFactory();

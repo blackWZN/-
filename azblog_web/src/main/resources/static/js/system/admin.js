@@ -113,9 +113,7 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                     Authorization: storage.getItem('token')
                 },
                 success: function (res) {
-                    if (res.status == '500') {
-                        layer.msg(res.message);
-                    } else {
+                    if (res.status == '200') {
                         layer.open({
                             title: '编辑用户',
                             type: 2,
@@ -130,6 +128,8 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                                 storage.setItem('adminId', data.id);
                             }
                         });
+                    } else {
+                        layer.msg(res.message);
                     }
                 },
             });
@@ -150,10 +150,10 @@ layui.use(['table', 'jquery', 'form', 'layedit', 'layer', 'laydate'], function (
                         success: function (data) {
                             if (data.status == '200') {
                                 layer.msg(data.message);
-                                table.reload('list', {});
                             }
                         }
                     })
+                    table.reload('list', {});
                 }
             });
         }

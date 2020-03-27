@@ -13,7 +13,7 @@ spring:
     open-in-view: true
     show-sql: true
   redis:
-    host: 192.168.25.136
+    host: 122.51.252.120
     port: 6379
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -27,7 +27,7 @@ spring:
       sampler:
         probability: 1.0 #采样的比例
   rabbitmq:
-    host: 192.168.25.136
+    host: 122.51.252.120
     username: guest
     password: guest
   cloud:

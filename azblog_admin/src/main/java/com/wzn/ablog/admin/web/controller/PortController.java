@@ -2,6 +2,8 @@ package com.wzn.ablog.admin.web.controller;
 
 import com.wzn.ablog.admin.service.PortService;
 import com.wzn.ablog.common.annotation.Authorized;
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.entity.Port;
 import com.wzn.ablog.common.entity.Role;
 import com.wzn.ablog.common.vo.AzResult;
@@ -27,7 +29,7 @@ public class PortController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public PageResult roleList(int page, int limit) {
         Page<Port> portPage = portService.list(page, limit);
-        return new PageResult("0", "加载完成", portPage.getTotalElements(), portPage.getTotalPages()
+        return new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG, portPage.getTotalElements(), portPage.getTotalPages()
                 , portPage.getContent());
     }
 
@@ -37,7 +39,7 @@ public class PortController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     public PageResult search(@PathVariable String keyword, int page, int limit){
         Page<Port> ports = portService.search(keyword, page, limit);
-        return new PageResult("0","搜索成功",ports.getTotalElements(),
+        return new PageResult(AzStatus.PAGE,AzContants.SUCCESS_MSG,ports.getTotalElements(),
                 ports.getTotalPages(),ports.getContent());
     }
 }

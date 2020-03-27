@@ -110,7 +110,7 @@
           $('form input').eq(1).val(articleDta.intro);
           //获取分类
           $.ajax({
-            url: 'http://localhost:8202/category/category?page=1&&limit=10',
+            url: 'http://localhost:8202/category/category/all',
             type: 'get',
             dataType: "json",
             contentType: "application/json;charset=utf-8",
@@ -118,7 +118,7 @@
               Authorization: storage.getItem('token')
             },
             success: function (res) {
-              if (res.status == '0') {
+              if (res.status == '200') {
                 var cate = $('#loadCate');
                 var data = res.data;
                 $.each(data, function (i, item) {

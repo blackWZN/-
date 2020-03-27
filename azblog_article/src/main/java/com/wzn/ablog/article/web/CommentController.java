@@ -3,6 +3,8 @@ package com.wzn.ablog.article.web;
 import com.wzn.ablog.article.feign.SearchFeign;
 import com.wzn.ablog.article.service.CommentService;
 import com.wzn.ablog.common.annotation.Authorized;
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.entity.Comment;
 import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
@@ -31,7 +33,7 @@ public class CommentController {
     @GetMapping
     public PageResult list(int page,int limit){
         Page<Comment> pageInfo = commentService.list(page, limit);
-        return  new PageResult("0","列表加载成功",pageInfo.getTotalElements()
+        return  new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG,pageInfo.getTotalElements()
                 ,pageInfo.getTotalPages(),pageInfo.getContent());
     }
 
@@ -49,7 +51,7 @@ public class CommentController {
     @DeleteMapping("/{ids}")
     public AzResult del(@PathVariable String[] ids){
         commentService.del(ids);
-        return AzResult.ok("删除成功");
+        return AzResult.ok();
     }
 
     @PostMapping
@@ -57,7 +59,7 @@ public class CommentController {
     @ApiImplicitParam(name = "Authorization", value = "令牌", required = true)
     public AzResult add(@RequestBody Comment comment){
         commentService.add(comment);
-        return AzResult.ok("添加成功");
+        return AzResult.ok();
     }
 
     @ApiOperation(value = "修改评论")
@@ -65,7 +67,7 @@ public class CommentController {
     @PutMapping
     public AzResult update(@RequestBody Comment comment){
         commentService.update(comment);
-        return AzResult.ok("更新成功");
+        return AzResult.ok();
     }
 
     @ApiOperation(value = "全部评论")

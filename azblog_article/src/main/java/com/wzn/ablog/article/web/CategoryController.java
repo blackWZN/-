@@ -3,6 +3,8 @@ package com.wzn.ablog.article.web;
 import com.wzn.ablog.article.feign.SearchFeign;
 import com.wzn.ablog.article.service.CategoryService;
 import com.wzn.ablog.common.annotation.Authorized;
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.entity.Category;
 import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
@@ -32,27 +34,27 @@ public class CategoryController {
     @GetMapping
     public PageResult list(Integer page, Integer limit){
         Page<Category> pageInfo = categoryService.list(page, limit);
-        return new PageResult("0","列表加载成功",pageInfo.getTotalElements()
+        return new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG,pageInfo.getTotalElements()
         ,pageInfo.getTotalPages(),pageInfo.getContent());
     }
 
     @ApiOperation(value = "全部分类")
     @ApiImplicitParam(name = "Authorization", value = "令牌", required = true)
     @GetMapping("/all")
-    public List<Category> all(){
-      return categoryService.list();
+    public AzResult all(){
+      return AzResult.ok().data(categoryService.list());
     }
 
 
     @ApiOperation(value = "根据id查找分类")
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
     @GetMapping("/{id}")
-    public Result findNameById(@PathVariable String id){
+    public AzResult findNameById(@PathVariable String id){
         String name = categoryService.findNameById(id);
         if(name != null){
-            return new Result("200","已查找到分类名称",name);
+            return AzResult.ok(AzStatus.SUCCESS).data(name);
         }
-        return new Result("200","未查找到分类名称");
+        return AzResult.ok(AzStatus.ERR);
     }
 
     @ApiOperation(value = "根据id删除分类",notes = "token需要有root权限")
@@ -61,7 +63,7 @@ public class CategoryController {
     @DeleteMapping("/{ids}")
     public AzResult del(@PathVariable String[] ids){
         categoryService.del(ids);
-        return AzResult.ok("删除成功");
+        return AzResult.ok();
     }
 
     @ApiOperation(value = "添加分类")
@@ -69,7 +71,7 @@ public class CategoryController {
     @PostMapping
     public AzResult add(@RequestBody Category category){
         categoryService.add(category);
-        return AzResult.ok("添加成功");
+        return AzResult.ok();
     }
 
     @ApiOperation(value = "修改分类")
@@ -77,13 +79,13 @@ public class CategoryController {
     @PutMapping
     public AzResult update(@RequestBody Category category){
         categoryService.update(category);
-        return AzResult.ok("更新成功");
+        return AzResult.ok();
     }
 
     @ApiOperation(value = "搜索分类")
     @ApiImplicitParam(name = "Authorization", value = "token", required = true)
-    @GetMapping("/search")
-    public PageResult search(String keywords,int page,int limit){
+    @GetMapping("/search/{keywords}")
+    public PageResult search(@PathVariable String keywords,int page,int limit){
         return searchFeign.searchCategroy(keywords, page, limit);
     }
 }

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -159,6 +160,11 @@ public class AdminService implements UserDetailsService {
         String roleId = params.get("roleId")+"";
         adminDao.delAllRole(adminId);
         adminDao.setRoles(idWorker.nextId()+"",adminId,roleId);
+
+    }
+
+    public void refreshPort(){
+        File file = new File("com.wzn.ablog.admin.web.controller");
 
     }
 }

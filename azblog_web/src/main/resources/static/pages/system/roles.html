@@ -51,6 +51,7 @@
         var storage = window.localStorage;
         var $ = layui.jquery;
         var form = layui.form;
+        
         table.render({
           elem: '#list'
           , url: 'http://localhost:8202/role/role/roleList'
@@ -114,7 +115,7 @@
             layer.open({
               content: '确定要删除该角色？',
               yes: function (index, layero) {
-                layer.close(index);
+                
                 $.ajax({
                   url: 'http://localhost:8202/role/role/' + data.role_id,
                   type: 'delete',
@@ -126,12 +127,14 @@
                   success: function (res) {
                     if (res.status == '200') {
                       layer.msg(res.message);
-                      table.reload('list', {});
+                      
                     } else {
                       layer.msg(res.message)
                     }
                   },
                 });
+                layer.close(index);
+                table.reload('list', {});
               }
             });
 

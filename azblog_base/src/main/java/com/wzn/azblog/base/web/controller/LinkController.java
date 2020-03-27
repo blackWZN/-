@@ -1,5 +1,7 @@
 package com.wzn.azblog.base.web.controller;
 
+import com.wzn.ablog.common.contants.AzContants;
+import com.wzn.ablog.common.contants.AzStatus;
 import com.wzn.ablog.common.entity.Link;
 import com.wzn.ablog.common.vo.AzResult;
 import com.wzn.ablog.common.vo.PageResult;
@@ -24,7 +26,7 @@ public class LinkController {
     @GetMapping
     public PageResult list(int page,int limit) {
         Page<Link> list = linkService.list(page, limit);
-        return new PageResult("0", "列表加载完成", list.getTotalElements(),
+        return new PageResult(AzStatus.PAGE, AzContants.SUCCESS_MSG, list.getTotalElements(),
                 list.getTotalPages(), list.getContent());
     }
 
@@ -60,7 +62,7 @@ public class LinkController {
     @GetMapping("/search/{keywords}")
     public PageResult search(@PathVariable String keywords,int page,int limit){
         Page<Link> links = linkService.search(keywords, page, limit);
-        return new PageResult("0","搜索成功",
+        return new PageResult(AzStatus.PAGE,AzContants.SUCCESS_MSG,
                 links.getTotalElements(),links.getTotalPages(),links.getContent());
     }
 }

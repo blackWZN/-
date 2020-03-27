@@ -17,7 +17,7 @@ import java.util.*;
 
 public class BlogUtils {
 
-    public static void respMsg(HttpServletResponse response, String status, String msg, Object data) {
+    public static void respMsg(HttpServletResponse response, Integer status, String msg, Object data) {
         try {
             Result result = new Result(status, msg, data);
             ObjectMapper mapper = new ObjectMapper();
@@ -32,21 +32,15 @@ public class BlogUtils {
         }
     }
 
-    public static String code(HttpServletRequest request) {
+    public static String code() {
         StringBuffer stringBuffer = new StringBuffer();
         for(int i=0;i<6;i++) {
             stringBuffer.append(Integer.toHexString(new Random().nextInt(16)));
         }
         String code = stringBuffer.toString().toUpperCase();
-        request.getSession().setAttribute("code", code);
         return code;
     }
 
-    public static String getCode(HttpServletRequest request){
-        String code = (String) request.getSession().getAttribute("code");
-        request.getSession().invalidate();
-        return code;
-    }
 
     //转换实体类
     public static <T> List<T> castEntity(List<Object[]> list, Class<T> clazz){
