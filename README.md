@@ -27,6 +27,6 @@
 
 ## 效果图
 
-![断路监控](G:\我的项目\azblog\azblog_doc\断路监控.jpg)
+![断路监控](\azblog_doc\断路监控.jpg)
 
-![角色管理](G:\我的项目\azblog\azblog_doc\角色管理.jpg)
+![角色管理](\azblog_doc\角色管理.jpg)
