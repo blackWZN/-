@@ -29,4 +29,4 @@
 
 ![断路监控](https://github.com/blackWZN/blogManage/blob/before/azblog_doc/%E6%96%AD%E8%B7%AF%E7%9B%91%E6%8E%A7.jpg?raw=true)
 
-![角色管理](\azblog_doc\角色管理.jpg)
+![角色管理](https://github.com/blackWZN/blogManage/blob/before/azblog_doc/%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86.jpg?raw=true)
