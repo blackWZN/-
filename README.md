@@ -27,6 +27,6 @@
 
 ## 效果图
 
-![断路监控](\azblog_doc\断路监控.jpg)
+![断路监控](https://github.com/blackWZN/blogManage/blob/before/azblog_doc/%E6%96%AD%E8%B7%AF%E7%9B%91%E6%8E%A7.jpg?raw=true)
 
 ![角色管理](\azblog_doc\角色管理.jpg)
