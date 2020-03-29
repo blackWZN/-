@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/a_blogs?useSSL=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
     username: root
-    password: '0504'
+    password: xxxx
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   jpa:
