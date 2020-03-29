@@ -7,9 +7,7 @@ spring:
       discovery:
         enabled: true
         service-id: azblog-config
-      #配置中心的用户名和密码
-#      username: user
-#      password: 123456789101112
+
 #刷新配置的请求地址
 management:
   endpoints:
