@@ -11,10 +11,11 @@ spring:
           username: znWei
           password: xxxx
   rabbitmq:
-    host: 122.51.252.120
+    host: 192.168.25.136
     port: 5672
     username: guest
     password: guest
+
 #刷新配置的请求地址
 management:
   endpoints:

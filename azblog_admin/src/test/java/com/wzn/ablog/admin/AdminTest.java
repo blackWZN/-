@@ -10,12 +10,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -123,6 +125,11 @@ public class AdminTest {
     @Test
     public void test7() throws FileNotFoundException {
 
+
+            String url = "http://127.0.0.1:9999/encrypt";
+            RestTemplate template = new RestTemplate();
+            ResponseEntity<String> msg = template.postForEntity(url, "123456", String.class);
+            System.out.println(msg.getBody());
 
     }
 
