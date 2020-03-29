@@ -15,7 +15,6 @@
 - Redis
 - RabbitMQ
 - Lombok
-- Druid
 
 ## 前端技术
 
